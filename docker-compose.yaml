@@ -1,0 +1,14 @@
+name: music-collab-playlist-webapp
+
+services:
+  backend:
+    image: music-collab-playlist-be
+    ports:
+      - 8080:8080
+    container_name: backend
+
+  frontend:
+    image: music-collab-playlist-fe
+    ports:
+      - "4200:8080"
+    container_name: frontend
