@@ -1,0 +1,12 @@
+{
+  "name": "@hegpetac/music-collab-playlist-api",
+  "version": "1.0.0",
+  "description": "OpenAPI specification for Collaborative music playlist handler frontend",
+  "files": ["dist/music-collab-playlist-api.yaml.yaml"],
+  "scripts": {
+    "build": "mkdir -p dist && cp src/main/resources/music-collab-playlist-api.yaml dist/music-collab-playlist-api.yaml"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
+}

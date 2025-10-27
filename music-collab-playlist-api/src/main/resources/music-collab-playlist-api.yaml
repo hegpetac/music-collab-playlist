@@ -1,0 +1,19 @@
+openapi: '3.0.3'
+info:
+  title: music-collab-playlist-api
+  description: OpenAPI specification for Collaborative music playlist handler
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /api/user:
+    get:
+      operationId: getUsers
+      description: get all users
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: boolean
