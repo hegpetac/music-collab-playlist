@@ -1,4 +1,4 @@
-package hu.hegpetac.music_collab_playlist_be;
+package hu.hegpetac.music.collab.playlist.be;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
