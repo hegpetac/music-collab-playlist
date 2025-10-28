@@ -3,8 +3,8 @@ spring:
     name: music-collab-playlist-be
   datasource:
     url: jdbc:postgresql://db:5432/music-collab-playlist-db
-    username: admin
-    password: admin
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -13,3 +13,33 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid,profile,email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-name: Google
+            authorization-grant-type: authorization_code
+          spotify:
+            client-id: ${SPOTIFY_CLIENT_ID}
+            client-secret: ${SPOTIFY_CLIENT_SECRET}
+            scope:
+              - user-read-playback-state
+              - user-modify-playback-state
+              - user-read-currently-playing
+              - user-top-read
+              - user-read-recently-played
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registartionId}"
+            client-name: Spotify
+            authorization-grant-type: authorization_code
+        provider:
+          spotify:
+            authorization-uri: https://accounts.spotify.com/authorize
+            token-uri: https://accounts.spotify.com/api/token
+            user-info-uri: https://api.spotify.com/v1/me
+            user-name-attribute: id
+
