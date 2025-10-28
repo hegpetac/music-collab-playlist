@@ -1,5 +1,6 @@
 package hu.hegpetac.music.collab.playlist.be.authentication.entity;
 
+import hu.hegpetac.music.collab.playlist.be.playlist.entity.Playlist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,8 @@ public class AppUser {
     private String displayName;
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
+    @Column
+    private OAuthProvider provider;
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -46,4 +49,7 @@ public class AppUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<AppRefreshToken> refreshTokens = new HashSet<>();
+
+    @OneToOne(mappedBy = "owner")
+    private Playlist playlist;
 }
