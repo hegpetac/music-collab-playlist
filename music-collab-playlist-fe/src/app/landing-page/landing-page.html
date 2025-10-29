@@ -1,5 +1,5 @@
 <mat-card class="card">
-  <app-code-join/>
+  <app-code-join (codeEntered)="joinToSession($event)" />
   <button mat-stroked-button class="provider-login">
     <mat-icon style="width: 40px; height:24px"
             svgIcon="google-logo"></mat-icon> Login With Google

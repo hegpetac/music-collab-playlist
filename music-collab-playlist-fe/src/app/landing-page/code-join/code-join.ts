@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Output, QueryList, ViewChildren} from '@angular/core';
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormField} from '@angular/material/form-field';
 import {MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
