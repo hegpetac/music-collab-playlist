@@ -1,0 +1,17 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  background-color: #121212;
+  color: white;
+  padding: 2rem;
+}
+
+.provider-login {
+  width: 300px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: white !important;
+}

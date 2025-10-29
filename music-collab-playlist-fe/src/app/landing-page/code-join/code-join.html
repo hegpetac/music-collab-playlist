@@ -1,0 +1,36 @@
+<div class="join-container">
+  <p style="font-size: medium">Enter the 6-digit code to join someone else's playlist</p>
+
+  <div class="code-inputs">
+    @for (digit of code; track $index; let i = $index) {
+    <mat-form-field
+      appearance="outline"
+      class="digit-field"
+    >
+      <input
+        matInput
+        #codeInput
+        maxlength="1"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        [(ngModel)]="code[i]"
+        (input)="onInput($event, i)"
+        (keydown)="onKeyDown($event, i)"
+        (focus)="onFocus(i)"
+      />
+    </mat-form-field>
+    }
+  </div>
+
+  @if (code.join('').length == 6) {
+  <button
+    mat-flat-button
+    color="accent"
+    class="join-button"
+    [disabled]="code.join('').length !== 6"
+    (click)="emitIfComplete()"
+  >
+    Join
+  </button>
+  }
+</div>

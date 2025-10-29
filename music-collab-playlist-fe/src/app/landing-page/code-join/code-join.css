@@ -1,0 +1,48 @@
+.join-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #121212;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+
+h2 {
+  margin-bottom: 0.5rem;
+}
+
+p {
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+}
+
+.code-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.digit-field {
+  width: 50px;
+
+  input {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .mat-mdc-form-field-outline {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.join-button {
+  width: 300px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
