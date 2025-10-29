@@ -27,7 +27,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     ) throws IOException {
         CustomUserPrincipal principal = (CustomUserPrincipal) authentication.getPrincipal();
         String token = jwtUtil.generateToken(principal.getUser(), List.of("authenticated"), 86400000L);
-        String redirectUrl = "http://localhost:4200/playlist?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
+        String redirectUrl = System.getenv("FRONTEND_BASEURL") + "/dashboard?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
         response.sendRedirect(redirectUrl);
     }
 }
