@@ -3,7 +3,6 @@ package hu.hegpetac.music.collab.playlist.be.authentication.entity;
 import hu.hegpetac.music.collab.playlist.be.playlist.entity.Playlist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,12 +11,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AppUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,26 +27,11 @@ public class AppUser {
     private String displayName;
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
-    @Column
-    private OAuthProvider provider;
     private boolean enabled = true;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    @Builder.Default
-    private Set<Role> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<OAuthAccount> oAuthAccounts = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<AppRefreshToken> refreshTokens = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "spotify_account_id", referencedColumnName = "id")
+    private OAuthAccount spotifyAccount;
 
     @OneToOne(mappedBy = "owner")
     private Playlist playlist;

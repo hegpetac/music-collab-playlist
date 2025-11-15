@@ -1,61 +1,90 @@
 package hu.hegpetac.music.collab.playlist.be.authentication.service;
 
-import hu.hegpetac.music.collab.playlist.be.authentication.entity.AppUser;
+import hu.hegpetac.music.collab.playlist.be.authentication.entity.OAuthAccount;
+import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
 import hu.hegpetac.music.collab.playlist.be.authentication.entity.OAuthProvider;
-import hu.hegpetac.music.collab.playlist.be.authentication.principal.CustomUserPrincipal;
+import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2User;
+import hu.hegpetac.music.collab.playlist.be.authentication.repository.OAuthAccountRepository;
 import hu.hegpetac.music.collab.playlist.be.authentication.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import java.time.Instant;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
+    private final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
     private final UserRepository userRepository;
+    private final OAuthAccountRepository accountRepository;
 
     @Override
-    @Transactional
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        OAuth2User oauth2User = delegate.loadUser(userRequest);
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        OAuthProvider provider = OAuthProvider.GOOGLE.name().equalsIgnoreCase(registrationId) ? OAuthProvider.GOOGLE : OAuthProvider.SPOTIFY;
 
-        OAuthProvider provider = OAuthProvider.valueOf(registrationId.toUpperCase());
+        String providerUserId = oauth2User.getAttribute("sub") != null ? oauth2User.getAttribute("sub") : oauth2User.getAttribute("id");
+        String email = oauth2User.getAttribute("email");
 
-        Map<String, Object> attributes = oAuth2User.getAttributes();
+        User user;
 
-        String username;
-        String email;
-
-        if (provider == OAuthProvider.GOOGLE) {
-            email = (String) attributes.get("email");
-            username = (String) attributes.get("name");
-        } else if (provider == OAuthProvider.SPOTIFY) {
-            email =  (String) attributes.get("email");
-            username = (String) attributes.get("display_name");
+        if(provider == OAuthProvider.GOOGLE) {
+            user = userRepository.findByEmail(email).orElseGet(() -> {
+                User u = new User();
+                u.setEmail(email);
+                u.setUsername(oauth2User.getAttribute("name"));
+                return userRepository.save(u);
+            });
         } else {
-            throw new OAuth2AuthenticationException("Unsupported provider: " + registrationId);
+            Optional<OAuthAccount> existing = accountRepository.findByProviderAndProviderUserId(provider, providerUserId);
+            if (existing.isPresent()) {
+                user = existing.get().getUser();
+            } else {
+                user = new User();
+                user.setDisplayName(oauth2User.getAttribute("display_name"));
+
+                User finalUser = user;
+                OAuthAccount account = accountRepository.findByProviderAndProviderUserId(provider, providerUserId)
+                        .orElseGet(() -> {
+                            OAuthAccount a = new OAuthAccount();
+                            a.setProvider(provider);
+                            a.setProviderUserId(providerUserId);
+                            a.setUser(finalUser);
+                            return a;
+                        });
+
+                account.setAccessToken(userRequest.getAccessToken().getTokenValue());
+                account.setAccessTokenExpiresAt(userRequest.getAccessToken().getExpiresAt());
+                OAuth2RefreshToken newRefreshToken = null;
+
+                try {
+                    String refreshTokenString = (String) userRequest.getAdditionalParameters().get("refresh_token");
+                    if (refreshTokenString != null) {
+                        newRefreshToken = new OAuth2RefreshToken(refreshTokenString, Instant.now());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (newRefreshToken != null) {
+                    account.setRefreshToken(newRefreshToken.getTokenValue());
+                }
+
+                accountRepository.save(account);
+                user.setSpotifyAccount(account);
+                user = userRepository.save(user);
+            }
         }
 
-        AppUser user = userRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    AppUser newUser = new AppUser();
-                    newUser.setUsername(username);
-                    newUser.setEmail(email);
-                    newUser.setDisplayName(username);
-                    newUser.setProvider(provider);
-                    return userRepository.save(newUser);
-                });
-
-        user.setUsername(username);
-        userRepository.save(user);
-
-        return new CustomUserPrincipal(user, oAuth2User.getAttributes());
+        return new CustomOAuth2User(oauth2User, user);
     }
-
 }

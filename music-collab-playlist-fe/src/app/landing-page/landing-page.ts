@@ -26,6 +26,15 @@ export class LandingPage {
     iconRegistry.addSvgIcon("spotify-logo", domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/spotify.svg'));
   }
 
+  //TODO change localhost URL's
+  public loginWithGoogle() {
+    window.location.href = 'http://127.0.0.1:8080/oauth2/authorization/google';
+  }
+
+  public loginWithSpotify() {
+    window.location.href = 'http://127.0.0.1:8080/oauth2/authorization/spotify';
+  }
+
   public joinToSession(code: string) : void {
     //TODO implement function
   }

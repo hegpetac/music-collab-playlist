@@ -1,6 +1,6 @@
 package hu.hegpetac.music.collab.playlist.be.playlist.entity;
 
-import hu.hegpetac.music.collab.playlist.be.authentication.entity.AppUser;
+import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class Playlist {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
-    private AppUser owner;
+    private User owner;
 }

@@ -21,7 +21,7 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: openid,profile,email
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: "${BACKEND_BASEURL}/login/oauth2/code/{registrationId}"
             client-name: Google
             authorization-grant-type: authorization_code
           spotify:
@@ -33,7 +33,7 @@ spring:
               - user-read-currently-playing
               - user-top-read
               - user-read-recently-played
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registartionId}"
+            redirect-uri: "${BACKEND_BASEURL}/login/oauth2/code/spotify"
             client-name: Spotify
             authorization-grant-type: authorization_code
         provider:
@@ -43,3 +43,8 @@ spring:
             user-info-uri: https://api.spotify.com/v1/me
             user-name-attribute: id
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web: DEBUG
+    org.springframework.security.oauth2: DEBUG

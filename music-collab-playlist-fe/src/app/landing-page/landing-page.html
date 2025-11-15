@@ -1,10 +1,10 @@
 <mat-card class="card">
   <app-code-join (codeEntered)="joinToSession($event)" />
-  <button mat-stroked-button class="provider-login">
+  <button mat-stroked-button class="provider-login" (click)="loginWithGoogle()">
     <mat-icon style="width: 40px; height:24px"
             svgIcon="google-logo"></mat-icon> Login With Google
   </button>
-  <button mat-stroked-button class="provider-login">
+  <button mat-stroked-button class="provider-login" (click)="loginWithSpotify()">
     <mat-icon style="width: 40px; height:24px"
               svgIcon="spotify-logo"></mat-icon> Login With Spotify
   </button>
