@@ -1,0 +1,15 @@
+<mat-card class="card">
+  <p style="font-size: medium">You need to link both providers to your account!</p>
+  @if (requiredProviders.includes('google')) {
+    <button mat-stroked-button class="provider-login" (click)="linkProvider('google')">
+      <mat-icon style="width: 40px; height:24px"
+                svgIcon="google-logo"></mat-icon> Login With Google
+    </button>
+  }
+  @if (requiredProviders.includes('spotify')) {
+    <button mat-stroked-button class="provider-login" (click)="linkProvider('spotify')">
+    <mat-icon style="width: 40px; height:24px"
+              svgIcon="spotify-logo"></mat-icon> Login With Spotify
+    </button>
+  }
+</mat-card>
