@@ -2,18 +2,164 @@ openapi: '3.0.3'
 info:
   title: music-collab-playlist-api
   description: OpenAPI specification for Collaborative music playlist handler
-  version: 1.0.0
+  version: 1.1.0
+  license:
+    name: todo
+    url: todo
+
 servers:
-  - url: 'http://localhost:8080'
+  - url: 'http://127.0.0.1:8080'
+    description: Local Spring Boot Server
+
+components:
+  securitySchemes:
+    JSESSIONIDAuth:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID
+
+security:
+  - JSESSIONIDAuth: []
+
 paths:
-  /api/user:
+  /api/dashboard:
     get:
-      operationId: getUsers
-      description: get all users
+      operationId: getDashboardSettings
+      description: get dashboard settings for user
+      summary: Get dashboard settings
+#      parameters:
+#        - in: path
+#          name: userId
+#          schema:
+#            type: integer
+#          required: true
       responses:
         '200':
           description: 'Success'
           content:
             application/json:
               schema:
-                type: boolean
+                $ref: './model/dashboard-settings.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /api/dashboard/suggestion-playback:
+    post:
+      operationId: setSuggestionPlayback
+      description: modify suggestion playback settings for user
+      summary: Modify suggestion playback settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './enum/suggestion-playback-mode.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './enum/suggestion-playback-mode.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /api/dashboard/youtube-playback:
+    post:
+      operationId: setYoutubePlayback
+      description: modify youtube playback settings for user
+      summary: Modify youtube playback settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './enum/youtube-playback-mode.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './enum/youtube-playback-mode.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /api/dashboard/regenerate-code:
+    post:
+      operationId: regenerateDeviceCode
+      summary: Regenerate the unique 6-digit device code (server creates new code)
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './response/regenerate-code-resp.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+

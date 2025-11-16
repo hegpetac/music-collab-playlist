@@ -1,0 +1,11 @@
+type: object
+properties:
+  deviceCode:
+    type: integer
+    maximum: 0
+    minimum: 999999
+    description: 6-digit code (server generated)
+  qrBaseUrl:
+    type: string
+    description: Base URL used to build the QR link
+    format: uri
