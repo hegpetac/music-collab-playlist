@@ -1,0 +1,7 @@
+extends:
+  - recommended
+
+lint:
+  rules:
+    info-license:
+      severity: off
