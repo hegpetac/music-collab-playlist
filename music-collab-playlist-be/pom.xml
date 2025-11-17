@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
+        <contract.version>1.1.2</contract.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -108,6 +109,22 @@
             <artifactId>jjwt-api</artifactId>
             <version>0.13.0</version>
         </dependency>
+        <dependency>
+            <groupId>hu.hegpetac</groupId>
+            <artifactId>music-collab-playlist-api</artifactId>
+            <version>${contract.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>7.17.0</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -138,6 +155,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+                    <mainClass>hu.hegpetac.music.collab.playlist.be.MusicCollabPlaylistBeApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
@@ -146,7 +164,55 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.9.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack-openapi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>hu.hegpetac</groupId>
+                                    <artifactId>music-collab-playlist-api</artifactId>
+                                    <version>${contract.version}</version>
+                                    <includes>**/*.yaml</includes>
+                                    <outputDirectory>${project.build.directory}/generated-spec</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.17.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-api-java-model</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>spring</generatorName>
+                            <inputSpec>${project.build.directory}/generated-spec/music-collab-playlist-api.yaml</inputSpec>
+                            <output>${project.basedir}/target/generated-sources</output>
+                            <configOptions>
+                                <useTags>true</useTags>
+                                <useSpringController>true</useSpringController>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <generateConstructorWithAllArgs>true</generateConstructorWithAllArgs>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
-
 </project>
