@@ -21,6 +21,8 @@ security:
 paths:
   /api/dashboard:
     get:
+      tags:
+        - Dashboard
       operationId: getDashboardSettings
       description: get dashboard settings for user
       summary: Get dashboard settings
@@ -58,6 +60,8 @@ paths:
 
   /api/dashboard/suggestion-playback:
     post:
+      tags:
+        - Dashboard
       operationId: setSuggestionPlayback
       description: modify suggestion playback settings for user
       summary: Modify suggestion playback settings
@@ -95,6 +99,8 @@ paths:
 
   /api/dashboard/youtube-playback:
     post:
+      tags:
+        - Dashboard
       operationId: setYoutubePlayback
       description: modify youtube playback settings for user
       summary: Modify youtube playback settings
@@ -132,6 +138,8 @@ paths:
 
   /api/dashboard/regenerate-code:
     post:
+      tags:
+        - Dashboard
       operationId: regenerateDeviceCode
       summary: Regenerate the unique 6-digit device code (server creates new code)
       responses:
