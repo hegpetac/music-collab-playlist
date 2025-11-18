@@ -101,7 +101,11 @@ public class DashboardService {
                 if (existingDashboardSettings.isEmpty()) {
                     throw new NotFoundException("No settings found for user " + user.getId());
                 }
-                return existingDashboardSettings.get();
+                DashboardSettings dashboardSettings = existingDashboardSettings.get();
+                dashboardSettings.setSpotifyAccountDisplayName(user.getDisplayName());
+                dashboardSettings.setGoogleAccountEmail(user.getEmail());
+
+                return dashboardSettings;
             }
         }
 

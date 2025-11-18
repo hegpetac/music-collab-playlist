@@ -34,4 +34,10 @@ public class DashboardSettings {
 
     @OneToOne(mappedBy = "dashboardSettings")
     private User user;
+
+    @Transient
+    private String googleAccountEmail;
+
+    @Transient
+    private String spotifyAccountDisplayName;
 }
