@@ -26,12 +26,6 @@ paths:
       operationId: getDashboardSettings
       description: get dashboard settings for user
       summary: Get dashboard settings
-#      parameters:
-#        - in: path
-#          name: userId
-#          schema:
-#            type: integer
-#          required: true
       responses:
         '200':
           description: 'Success'
@@ -39,6 +33,45 @@ paths:
             application/json:
               schema:
                 $ref: './model/dashboard-settings.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /api/dashboard/name:
+    post:
+      tags:
+        - Dashboard
+      operationId: setName
+      description: modify suggestion playback settings for user
+      summary: Modify suggestion playback settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/modify-name-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: string
         '400':
           description: 'Bad Request'
           content:
@@ -70,7 +103,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './enum/suggestion-playback-mode.yaml'
+              $ref: './request/modify-suggestion-playback-mode-req.yaml'
       responses:
         '200':
           description: 'Success'
@@ -109,7 +142,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './enum/youtube-playback-mode.yaml'
+              $ref: './request/modify-youtube-playback-mode-req.yaml'
       responses:
         '200':
           description: 'Success'
