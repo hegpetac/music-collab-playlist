@@ -6,6 +6,7 @@ import hu.hegpetac.music.collab.playlist.be.authentication.entity.OAuthProvider;
 import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2User;
 import hu.hegpetac.music.collab.playlist.be.authentication.repository.OAuthAccountRepository;
 import hu.hegpetac.music.collab.playlist.be.authentication.repository.UserRepository;
+import hu.hegpetac.music.collab.playlist.be.dashboard.repository.DashboardSettingsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
     private final UserRepository userRepository;
+    private final DashboardSettingsRepository dashboardSettingsRepository;
     private final OAuthAccountRepository accountRepository;
 
     @Override

@@ -28,7 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
-        <contract.version>1.1.2</contract.version>
+        <contract.version>1.1.6</contract.version>
 	</properties>
 	<dependencies>
 		<dependency>

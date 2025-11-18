@@ -1,17 +1,16 @@
 package hu.hegpetac.music.collab.playlist.be.authentication.entity;
 
+import hu.hegpetac.music.collab.playlist.be.dashboard.entity.DashboardSettings;
 import hu.hegpetac.music.collab.playlist.be.playlist.entity.Playlist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "users")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
@@ -33,4 +32,12 @@ public class User {
 
     @OneToOne(mappedBy = "owner")
     private Playlist playlist;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dashboard_settings_id", referencedColumnName = "id")
+    private DashboardSettings dashboardSettings;
+
+    public User() {
+        this.dashboardSettings = new DashboardSettings();
+    }
 }
