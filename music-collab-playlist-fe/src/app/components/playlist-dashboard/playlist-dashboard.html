@@ -1,0 +1,102 @@
+<mat-card class="card">
+  <div class="settings-group">
+    <h3 class="group-heading">Linked accounts</h3>
+    <div class="setting-flex-section">
+        <label class="setting-label">Spotify</label>
+        <span>{{settings?.spotifyAccountDisplayName || 'Not linked'}}</span>
+        <button
+          mat-stroked-button
+          class="active-button"
+          (click)="changeProvider('spotify')"
+        >
+          Change Spotify account
+        </button>
+    </div>
+
+    <div class="setting-flex-section">
+      <label class="setting-label" style="font-weight: bold">Google</label>
+      <span>{{settings?.googleAccountEmail || 'Not linked'}}</span>
+      <button
+        mat-stroked-button
+        class="active-button"
+        (click)="changeProvider('google')"
+      >
+        Change Google account
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h3 class="group-heading">Playback settings</h3>
+    <div class="setting-flex-section">
+      <label class="setting-label">Suggestion playback mode</label>
+
+      <mat-radio-group
+        [value]="settings?.suggestionPlaybackMode"
+        (change)="onPlaybackChange($event.value)"
+        class="radio-group"
+      >
+        <mat-radio-button value="COLLECT_SUGGESTIONS" class="radio-button">
+          <label class="radio-button-label">
+            Collect suggestions
+          </label>
+        </mat-radio-button>
+        <mat-radio-button value="AUTO_PLAY_SUGGESTIONS" class="radio-button">
+          <label class="radio-button-label">
+            Auto play all suggestions
+          </label>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="setting-flex-section">
+      <label class="setting-label">YouTube playback mode</label>
+
+      <mat-radio-group
+        [value]="settings?.youtubePlaybackMode"
+        (change)="onYouTubeModeChange($event.value)"
+        class="radio-group"
+      >
+        <mat-radio-button value="BUILT_IN" class="radio-button">
+          <label class="radio-button-label">
+            Built-in
+          </label>
+        </mat-radio-button>
+        <mat-radio-button value="OPEN_NEW_TAB" class="radio-button">
+          <label class="radio-button-label">
+            Open in a new tab
+          </label>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <h3 class="group-heading">Join information</h3>
+    <div class="setting-section">
+      <label class="setting-label">Public name of playlist for joining (configurable)</label>
+      <mat-form-field>
+        <input matInput type="text" [(ngModel)]="settings!.name" (keyup)="nameInputChanged()"/>
+      </mat-form-field>
+    </div>
+    <div class="setting-section">
+      <label class="setting-label">Join code</label>
+      <div class="code-actions">
+      <label class="device-code">{{settings!.deviceCode}}</label>
+      <button
+        mat-stroked-button
+        class="active-button"
+        (click)="regenerateCode()"
+      >
+        Regenerate join code
+      </button>
+      </div>
+    </div>
+
+    @if (settings?.qrBaseUrl) {
+      <div class="setting-section">
+        <label class="setting-label">Join QR code</label>
+        <qrcode [qrdata]="settings!.qrBaseUrl!" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+      </div>
+    }
+  </div>
+</mat-card>

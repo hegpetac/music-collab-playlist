@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import {LandingPage} from './landing-page/landing-page';
-import {LinkAccount} from './link-account/link-account';
+import {LandingPage} from './components/landing-page/landing-page';
+import {LinkAccount} from './components/link-account/link-account';
+import {PlaylistDashboard} from './components/playlist-dashboard/playlist-dashboard';
 
 export const routes: Routes = [
   {
@@ -11,8 +12,8 @@ export const routes: Routes = [
     path: 'link-account',
     component: LinkAccount
   },
-  // {
-  //   path: 'playlist',
-  //   component:
-  // }
+  {
+    path: 'dashboard',
+    component: PlaylistDashboard
+  }
 ];

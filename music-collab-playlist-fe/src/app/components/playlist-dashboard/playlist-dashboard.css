@@ -1,0 +1,80 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  background-color: #121212;
+  color: white;
+  padding: 2rem;
+}
+
+.group-heading {
+  align-self: flex-start;
+  font-size: 1.2rem;
+}
+
+.settings-group {
+  width: 1000px;
+  padding-bottom: 1rem;
+}
+
+.active-button {
+  width: 220px;
+  color: white !important;
+}
+
+.setting-flex-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5rem;
+  justify-content: space-between;
+  color: #b3b3b3;
+}
+
+.radio-button-label {
+  color: #b3b3b3 !important;
+}
+
+.setting-label {
+  font-size: 1.05rem;
+  font-weight: bold;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  width: 450px;
+  gap: 1rem;
+
+}
+
+.radio-button {
+  width: 250px;
+}
+
+.setting-section {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  color: #b3b3b3 !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.device-code {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.code-actions {
+  display: flex;
+  gap: 3rem;
+  color: white !important;
+  align-items: center;
+}
+
+
+
