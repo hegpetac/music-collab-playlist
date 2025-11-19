@@ -28,4 +28,10 @@ public class ConnectController {
         response.sendRedirect(redirectUrl);
     }
 
+    @GetMapping("/dashboard")
+    public void redirectToFrontendDashboard(HttpServletResponse response) throws IOException {
+        System.out.println("Redirecting to frontend dashboard");
+        response.sendRedirect(frontendBaseUrl + "/dashboard");
+    }
+
 }

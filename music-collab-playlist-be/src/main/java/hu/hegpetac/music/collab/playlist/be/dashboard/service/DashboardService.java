@@ -36,7 +36,9 @@ public class DashboardService {
     private final Random random = new Random();
 
     public org.openapitools.model.DashboardSettings getDashboardSettings() throws UnauthorizedException, NotFoundException {
+        System.out.println("Getting dashboard settings for authenticated user");
         DashboardSettings dashboardSettings = getDashboardFromAuthenticatedUserFromSession();
+        System.out.println("Dashboard settings: ahsdufghuadsfhkjdashjkfhdjsak" + dashboardSettings);
 
         if (dashboardSettings.getDeviceCode() != null) {
             dashboardSettings = generateDeviceCode(dashboardSettings);

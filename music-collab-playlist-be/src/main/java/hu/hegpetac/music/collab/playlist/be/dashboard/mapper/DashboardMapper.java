@@ -5,7 +5,7 @@ import hu.hegpetac.music.collab.playlist.be.dashboard.entity.SuggestionPlaybackM
 import hu.hegpetac.music.collab.playlist.be.dashboard.entity.YoutubePlaybackMode;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface DashboardMapper {
     public DashboardSettings mapDashboardSettings(org.openapitools.model.DashboardSettings dashboardSettings);
     public org.openapitools.model.DashboardSettings mapDashboardSettings(DashboardSettings dashboardSettings);
