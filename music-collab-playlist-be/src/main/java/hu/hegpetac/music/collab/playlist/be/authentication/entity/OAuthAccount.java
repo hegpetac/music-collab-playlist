@@ -42,4 +42,9 @@ public class OAuthAccount {
 
     @OneToOne(mappedBy = "spotifyAccount")
     private User user;
+
+    @Override
+    public String toString() {
+        return provider.toString() + " " + providerUserId;
+    }
 }

@@ -1,6 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {MatCard} from '@angular/material/card';
 import {
+  Configuration,
   DashboardService,
   DashboardSettings,
   ModifySuggestionPlaybackModeReq,
@@ -13,7 +14,7 @@ import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {QRCodeComponent} from 'angularx-qrcode';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, Subject} from 'rxjs';
 
 @Component({
@@ -28,6 +29,13 @@ import {debounceTime, distinctUntilChanged, Subject} from 'rxjs';
     MatInput,
     ReactiveFormsModule,
     FormsModule
+  ],
+  providers: [
+    {
+      provide: Configuration,
+      useValue: new Configuration({ withCredentials: true })
+    },
+    DashboardService
   ],
   templateUrl: './playlist-dashboard.html',
   styleUrl: './playlist-dashboard.css',

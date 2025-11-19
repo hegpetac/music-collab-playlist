@@ -3,12 +3,21 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
+import { Configuration } from "../openapi";
+
+const apiConfiguration = new Configuration({
+  withCredentials: true,
+});
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(),
-    provideRouter(routes)
+    provideRouter(routes),
+    {
+      provide: Configuration,
+      useValue: apiConfiguration
+    }
   ]
 };

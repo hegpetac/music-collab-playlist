@@ -76,7 +76,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             }
         }
 
-        System.out.println("BEFORE RETURNING CUSTOM USER: " + user);
+        System.out.println("BEFORE RETURNING CUSTOM USER: GOOGLE account " + user.getEmail() + " SPOTIFY account " + user.getDisplayName());
         return new CustomOAuth2User(oauth2User, user);
     }
 

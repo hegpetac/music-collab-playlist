@@ -40,4 +40,9 @@ public class User {
     public User() {
         this.dashboardSettings = new DashboardSettings();
     }
+
+    @Override
+    public String toString() {
+        return email + " " + displayName;
+    }
 }
