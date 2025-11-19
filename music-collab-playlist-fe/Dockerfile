@@ -3,11 +3,16 @@ ARG NGINX_VERSION=alpine3.22
 
 FROM node:${NODE_VERSION} AS builder
 
+ARG GITHUB_TOKEN
+
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 
+RUN echo @hegpetac:registry=https://npm.pkg.github.com > .npmrc \
+ && echo //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN} >> .npmrc
 RUN --mount=type=cache,target=/root/.npm npm ci
+RUN rm .npmrc
 
 COPY . .
 
