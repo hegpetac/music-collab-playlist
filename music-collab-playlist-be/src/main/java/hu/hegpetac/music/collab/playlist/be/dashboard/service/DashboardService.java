@@ -37,7 +37,7 @@ public class DashboardService {
         DashboardSettings dashboardSettings = getDashboardFromAuthenticatedUserFromSession();
         System.out.println("Dashboard settings: ahsdufghuadsfhkjdashjkfhdjsak" + dashboardSettings);
 
-        if (dashboardSettings.getDeviceCode() != null) {
+        if (dashboardSettings.getDeviceCode() == null) {
             dashboardSettings = generateDeviceCode(dashboardSettings);
         }
 

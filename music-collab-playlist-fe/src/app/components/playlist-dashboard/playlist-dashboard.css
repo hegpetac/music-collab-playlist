@@ -76,5 +76,13 @@
   align-items: center;
 }
 
+.join-button {
+  width: 300px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+
 
 

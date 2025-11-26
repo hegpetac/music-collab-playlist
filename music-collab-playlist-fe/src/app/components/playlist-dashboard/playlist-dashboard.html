@@ -67,6 +67,13 @@
       <label class="setting-label">Public name of playlist for joining (configurable)</label>
       <mat-form-field>
         <input matInput type="text" [formControl]="dashboardForm.controls.playlistName"/>
+        @if (dashboardForm.controls.playlistName.hasError('required') &&
+        dashboardForm.controls.playlistName.touched) {
+          <mat-error>Please provide a name</mat-error>
+        }
+        @if (dashboardForm.controls.playlistName.hasError('nameTaken')) {
+          <mat-error>This name is already taken</mat-error>
+        }
       </mat-form-field>
     </div>
     <div class="setting-section">
@@ -89,6 +96,17 @@
         <qrcode [qrdata]="settings!.qrBaseUrl!" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
       </div>
     }
+  </div>
+  <div class="navigate-button">
+    <button
+      mat-flat-button
+      color="accent"
+      class="join-button"
+      [disabled]="dashboardForm.controls.playlistName.invalid"
+      (click)="navigateToPlaylist()"
+    >
+      Take me to my playlist
+    </button>
   </div>
 </mat-card>
 }

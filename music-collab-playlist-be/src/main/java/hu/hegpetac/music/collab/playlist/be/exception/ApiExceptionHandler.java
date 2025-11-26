@@ -23,14 +23,14 @@ public class ApiExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<BadRequest> handleUnauthorized(BadRequestException ex) {
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(new BadRequest(new BigDecimal(400), ex.getMessage()));
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<NotFound> handleUnauthorized(NotFoundException ex) {
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(new NotFound(new BigDecimal(400), ex.getMessage()));
+                .status(HttpStatus.NOT_FOUND)
+                .body(new NotFound(new BigDecimal(404), ex.getMessage()));
     }
 }

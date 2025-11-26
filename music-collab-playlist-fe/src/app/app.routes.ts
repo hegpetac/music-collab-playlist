@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {LandingPage} from './components/landing-page/landing-page';
 import {LinkAccount} from './components/link-account/link-account';
 import {PlaylistDashboard} from './components/playlist-dashboard/playlist-dashboard';
+import {PlaylistManager} from './components/playlist-manager/playlist-manager';
 
 export const routes: Routes = [
   {
@@ -15,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: PlaylistDashboard
+  },
+  {
+    path: 'playlist-manager',
+    component: PlaylistManager
   }
 ];

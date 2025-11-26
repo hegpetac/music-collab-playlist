@@ -12,10 +12,11 @@ import {
 import {MatButton} from '@angular/material/button';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {QRCodeComponent} from 'angularx-qrcode';
-import {MatFormField} from '@angular/material/form-field';
+import {MatError, MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-playlist-dashboard',
@@ -28,6 +29,7 @@ import {debounceTime, distinctUntilChanged} from 'rxjs';
     MatFormField,
     MatInput,
     ReactiveFormsModule,
+    MatError,
   ],
   providers: [
     {
@@ -41,7 +43,8 @@ import {debounceTime, distinctUntilChanged} from 'rxjs';
 })
 export class PlaylistDashboard implements OnInit {
   private _dashboardService: DashboardService = inject(DashboardService);
-  private _formbuilder: FormBuilder = inject(FormBuilder);
+  private _formBuilder: FormBuilder = inject(FormBuilder);
+  private _router: Router = inject(Router);
 
   public settings: DashboardSettings | null = null;
   public isRegenerating = false;
@@ -65,10 +68,10 @@ export class PlaylistDashboard implements OnInit {
   }
 
   public buildSettingsForm(s: DashboardSettings): FormGroup<IDashboardSettingsForm> {
-    return this._formbuilder.group<IDashboardSettingsForm>({
-      playlistName: this._formbuilder.nonNullable.control(s.name ?? "", [Validators.required]),
-      suggestionPlaybackMode: this._formbuilder.nonNullable.control(s.suggestionPlaybackMode ?? SuggestionPlaybackMode.CollectSuggestions),
-      youtubePlaybackMode: this._formbuilder.nonNullable.control(s.youtubePlaybackMode ?? YoutubePlaybackMode.BuiltIn)
+    return this._formBuilder.group<IDashboardSettingsForm>({
+      playlistName: this._formBuilder.nonNullable.control(s.name ?? "", [Validators.required]),
+      suggestionPlaybackMode: this._formBuilder.nonNullable.control(s.suggestionPlaybackMode ?? SuggestionPlaybackMode.CollectSuggestions),
+      youtubePlaybackMode: this._formBuilder.nonNullable.control(s.youtubePlaybackMode ?? YoutubePlaybackMode.BuiltIn)
     })
   }
 
@@ -102,10 +105,18 @@ export class PlaylistDashboard implements OnInit {
       distinctUntilChanged()
     ).subscribe(value => {
       if (value.trim() !== "") {
+        if (this.dashboardForm.controls.playlistName.hasError('nameTaken')) {
+          this.dashboardForm.controls.playlistName.setErrors(null);
+        }
         this._dashboardService.setName({name: value}).subscribe({
           next: (updatedNameResp) => {
             if (this.settings) {
               this.settings.name = updatedNameResp.name;
+            }
+          },
+          error: (err) => {
+            if (err.status === 400) {
+              this.dashboardForm.controls.playlistName.setErrors({ nameTaken: true });
             }
           }
         })
@@ -133,6 +144,10 @@ export class PlaylistDashboard implements OnInit {
         this.isRegenerating = false;
       }
     });
+  }
+
+  public navigateToPlaylist() {
+    this._router.navigate(['/playlist-manager']);
   }
 }
 
