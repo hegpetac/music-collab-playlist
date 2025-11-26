@@ -1,6 +1,6 @@
 {
   "name": "@hegpetac/music-collab-playlist-api",
-  "version": "1.1.9",
+  "version": "1.1.11",
   "description": "OpenAPI specification for Collaborative music playlist handler frontend",
   "scripts": {
     "build": "mkdir -p dist && cp -R src/main/resources dist",

@@ -71,7 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                $ref: './response/modify-name-resp.yaml'
         '400':
           description: 'Bad Request'
           content:

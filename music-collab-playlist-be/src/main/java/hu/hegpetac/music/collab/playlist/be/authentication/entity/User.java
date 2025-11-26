@@ -39,6 +39,7 @@ public class User {
 
     public User() {
         this.dashboardSettings = new DashboardSettings();
+        this.dashboardSettings.setName(this.displayName + "'s playlist");
     }
 
     @Override

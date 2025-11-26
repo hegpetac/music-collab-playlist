@@ -9,10 +9,7 @@ import hu.hegpetac.music.collab.playlist.be.exception.BadRequestException;
 import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
 import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.model.ModifyNameReq;
-import org.openapitools.model.ModifySuggestionPlaybackModeReq;
-import org.openapitools.model.ModifyYoutubePlaybackModeReq;
-import org.openapitools.model.RegenerateCodeResp;
+import org.openapitools.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -80,7 +77,7 @@ public class DashboardService {
         return dashboardMapper.mapYoutubePlaybackMode(dashboardSettings.getYoutubePlaybackMode());
     }
 
-    public String modifyName(ModifyNameReq modifyNameReq) throws UnauthorizedException, NotFoundException, BadRequestException {
+    public ModifyNameResp modifyName(ModifyNameReq modifyNameReq) throws UnauthorizedException, NotFoundException, BadRequestException {
         DashboardSettings dashboardSettings = getDashboardFromAuthenticatedUserFromSession();
         dashboardSettingsRepository.findByName(modifyNameReq.getName())
                 .ifPresent(_ -> {
@@ -90,7 +87,7 @@ public class DashboardService {
         dashboardSettings.setName(modifyNameReq.getName());
         dashboardSettings = dashboardSettingsRepository.save(dashboardSettings);
 
-        return dashboardSettings.getName();
+        return new ModifyNameResp(dashboardSettings.getName());
     }
 
     private DashboardSettings getDashboardFromAuthenticatedUserFromSession() throws UnauthorizedException {
@@ -115,7 +112,7 @@ public class DashboardService {
     }
 
     private DashboardSettings generateDeviceCode(DashboardSettings dashboardSettings) {
-        dashboardSettings.setDeviceCode(random.nextInt (900000) + 1000000);
+        dashboardSettings.setDeviceCode(random.nextInt (900000) + 100000);
         return dashboardSettingsRepository.save(dashboardSettings);
     }
 

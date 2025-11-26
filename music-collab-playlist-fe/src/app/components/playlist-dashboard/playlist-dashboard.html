@@ -1,3 +1,4 @@
+@if (dashboardForm) {
 <mat-card class="card">
   <div class="settings-group">
     <h3 class="group-heading">Linked accounts</h3>
@@ -30,12 +31,7 @@
     <h3 class="group-heading">Playback settings</h3>
     <div class="setting-flex-section">
       <label class="setting-label">Suggestion playback mode</label>
-
-      <mat-radio-group
-        [value]="settings?.suggestionPlaybackMode"
-        (change)="onPlaybackChange($event.value)"
-        class="radio-group"
-      >
+      <mat-radio-group class="radio-group" [formControl]="dashboardForm.controls.suggestionPlaybackMode">
         <mat-radio-button value="COLLECT_SUGGESTIONS" class="radio-button">
           <label class="radio-button-label">
             Collect suggestions
@@ -50,12 +46,7 @@
     </div>
     <div class="setting-flex-section">
       <label class="setting-label">YouTube playback mode</label>
-
-      <mat-radio-group
-        [value]="settings?.youtubePlaybackMode"
-        (change)="onYouTubeModeChange($event.value)"
-        class="radio-group"
-      >
+      <mat-radio-group class="radio-group" [formControl]="dashboardForm.controls.youtubePlaybackMode">
         <mat-radio-button value="BUILT_IN" class="radio-button">
           <label class="radio-button-label">
             Built-in
@@ -75,7 +66,7 @@
     <div class="setting-section">
       <label class="setting-label">Public name of playlist for joining (configurable)</label>
       <mat-form-field>
-        <input matInput type="text" [(ngModel)]="settings!.name" (keyup)="nameInputChanged()"/>
+        <input matInput type="text" [formControl]="dashboardForm.controls.playlistName"/>
       </mat-form-field>
     </div>
     <div class="setting-section">
@@ -100,3 +91,4 @@
     }
   </div>
 </mat-card>
+}

@@ -1,11 +1,8 @@
 package hu.hegpetac.music.collab.playlist.be.dashboard.controller;
 
 import hu.hegpetac.music.collab.playlist.be.dashboard.service.DashboardService;
-import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.api.DashboardApi;
 import org.openapitools.model.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
@@ -36,7 +33,7 @@ public class DashboardController implements org.openapitools.api.DashboardApi {
     }
 
     @Override
-    public ResponseEntity<String> setName(ModifyNameReq modifyNameReq) {
+    public ResponseEntity<ModifyNameResp> setName(ModifyNameReq modifyNameReq) {
         return ResponseEntity.ok(dashboardService.modifyName(modifyNameReq));
     }
 }
