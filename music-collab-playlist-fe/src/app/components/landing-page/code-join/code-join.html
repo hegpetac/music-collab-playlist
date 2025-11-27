@@ -1,6 +1,8 @@
 <div class="join-container">
-  <p style="font-size: medium">Enter the 6-digit code to join someone else's playlist</p>
-
+  <p style="font-size: medium">Enter the name and 6-digit code to join someone else's playlist</p>
+  <mat-form-field class="name-field">
+    <input matInput type="text" placeholder="Playlist's name" [(ngModel)]="playlistName">
+  </mat-form-field>
   <div class="code-inputs">
     @for (digit of code; track $index; let i = $index) {
     <mat-form-field
@@ -22,13 +24,13 @@
     }
   </div>
 
-  @if (code.join('').length == 6) {
+  @if (code.join('').length == 6 && playlistName.trim() !== '') {
   <button
     mat-flat-button
     color="accent"
     class="join-button"
-    [disabled]="code.join('').length !== 6"
-    (click)="emitIfComplete()"
+    [disabled]="code.join('').length !== 6 || playlistName.trim() === ''"
+    (click)="emit()"
   >
     Join
   </button>

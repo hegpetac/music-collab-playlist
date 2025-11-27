@@ -4,6 +4,7 @@ import hu.hegpetac.music.collab.playlist.be.authentication.filter.RequireBothPro
 import hu.hegpetac.music.collab.playlist.be.authentication.repository.UserRepository;
 import hu.hegpetac.music.collab.playlist.be.authentication.service.CustomOAuth2UserService;
 import hu.hegpetac.music.collab.playlist.be.authentication.service.PostLoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -31,6 +32,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${FRONTEND_BASEURL}")
+    private String frontendBaseUrl;
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final PostLoginSuccessHandler postLoginSuccessHandler;
@@ -63,7 +67,8 @@ public class SecurityConfig {
                                         "/connect/**",
                                         "/login/**",
                                         "/login/oauth2/**",
-                                        "/error"
+                                        "/error",
+                                        "/join-playlist"
                                 ).permitAll()
                                 .requestMatchers("/api/full/**").authenticated()
                                 .anyRequest().authenticated()
@@ -86,7 +91,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://127.0.0.1:4200"));
+        configuration.setAllowedOrigins(List.of(frontendBaseUrl));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization", "Cache-Control", "Content-Type",

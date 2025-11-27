@@ -1,6 +1,11 @@
 <mat-card class="card">
   <app-code-join (codeEntered)="joinToSession($event)" />
-  <button mat-stroked-button class="provider-login" (click)="loginWithGoogle()">
+  @if (playlistNotFound) {
+    <mat-error>
+      Playlist with provided details doesn't exist
+    </mat-error>
+  }
+  <button mat-stroked-button class="provider-login" style="margin-top: 1.5rem" (click)="loginWithGoogle()">
     <mat-icon style="width: 40px; height:24px"
             svgIcon="google-logo"></mat-icon> Login With Google
   </button>

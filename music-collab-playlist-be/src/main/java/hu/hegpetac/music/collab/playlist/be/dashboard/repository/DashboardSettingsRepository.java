@@ -9,6 +9,5 @@ import java.util.Optional;
 public interface DashboardSettingsRepository extends JpaRepository<DashboardSettings, Long> {
     Optional<DashboardSettings> findByUser(User user);
     Optional<DashboardSettings> findByName(String name);
-
-    Optional<DashboardSettings> findByDeviceCode(Integer deviceCode);
+    Optional<DashboardSettings> findByNameAndDeviceCode(String name, Integer deviceCode);
 }

@@ -35,7 +35,6 @@ public class DashboardService {
     public org.openapitools.model.DashboardSettings getDashboardSettings() throws UnauthorizedException, NotFoundException {
         System.out.println("Getting dashboard settings for authenticated user");
         DashboardSettings dashboardSettings = getDashboardFromAuthenticatedUserFromSession();
-        System.out.println("Dashboard settings: ahsdufghuadsfhkjdashjkfhdjsak" + dashboardSettings);
 
         if (dashboardSettings.getDeviceCode() == null) {
             dashboardSettings = generateDeviceCode(dashboardSettings);
@@ -117,7 +116,7 @@ public class DashboardService {
     }
 
     private org.openapitools.model.DashboardSettings generateQRCodeUrl(org.openapitools.model.DashboardSettings dashboardSettings) {
-        String QRCodeUrl = frontendBaseUrl + "/join?name=" + dashboardSettings.getName() + "&deviceCode=" + dashboardSettings.getDeviceCode();
+        String QRCodeUrl = frontendBaseUrl + "/suggestion-dashboard?name=" + dashboardSettings.getName() + "&deviceCode=" + dashboardSettings.getDeviceCode();
         try {
             dashboardSettings.setQrBaseUrl(new URI(QRCodeUrl));
         } catch (URISyntaxException e) {

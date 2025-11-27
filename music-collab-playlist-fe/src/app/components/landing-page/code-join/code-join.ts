@@ -3,6 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormField} from '@angular/material/form-field';
 import {MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
+import {JoinPlaylistReq} from '../../../../openapi';
 
 @Component({
   selector: 'app-code-join',
@@ -11,15 +12,16 @@ import {MatInput} from '@angular/material/input';
     ReactiveFormsModule,
     FormsModule,
     MatButton,
-    MatInput
+    MatInput,
   ],
   templateUrl: './code-join.html',
   styleUrl: './code-join.css'
 })
 export class CodeJoin {
-  @Output() codeEntered = new EventEmitter<string>();
+  @Output() codeEntered = new EventEmitter<JoinPlaylistReq>();
 
   public code: string[] = ['', '', '', '', '', '']
+  public playlistName: string = "";
 
   @ViewChildren('codeInput') codeInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
@@ -40,7 +42,6 @@ export class CodeJoin {
 
       const next = Math.min(index + value.length, this.code.length - 1);
       this.codeInputs.toArray()[next].nativeElement.focus();
-      this.emitIfComplete();
       return;
     }
 
@@ -52,8 +53,6 @@ export class CodeJoin {
       this.code[index + 1] = '';
       nextInput.focus();
     }
-
-    this.emitIfComplete();
   }
 
 
@@ -72,16 +71,19 @@ export class CodeJoin {
     }
   }
 
-  public   onFocus(index: number): void {
+  public onFocus(index: number): void {
     const input = this.codeInputs.toArray()[index].nativeElement;
     input.value = '';
     this.code[index] = '';
   }
 
-  public emitIfComplete(): void {
+  public emit(): void {
     const joined = this.code.join('');
-    if (joined.length == 6 && /^\d{6}$/.test(joined)) {
-      this.codeEntered.emit(joined);
+    if (joined.length == 6 && /^\d{6}$/.test(joined) && this.playlistName.trim() !== '') {
+      this.codeEntered.emit({
+        deviceCode: Number.parseInt(joined),
+        name: this.playlistName,
+      });
     }
   }
 }

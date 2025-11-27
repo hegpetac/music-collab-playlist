@@ -12,8 +12,8 @@ properties:
     $ref: "./../enum/youtube-playback-mode.yaml"
   deviceCode:
     type: integer
-    maximum: 0
-    minimum: 999999
+    maximum: 999999
+    minimum: 100000
     description: 6-digit code (server generated)
   qrBaseUrl:
     type: string

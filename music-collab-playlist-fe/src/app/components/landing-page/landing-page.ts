@@ -4,6 +4,9 @@ import {MatIcon, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CodeJoin} from './code-join/code-join';
 import {MatButton} from '@angular/material/button';
+import {JoinPlaylistReq, JoinService} from '../../../openapi';
+import {Router} from '@angular/router';
+import {MatError} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-landing-page',
@@ -12,12 +15,15 @@ import {MatButton} from '@angular/material/button';
     MatIcon,
     CodeJoin,
     MatButton,
+    MatError,
   ],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css'
 })
 export class LandingPage {
-
+  private _joinService: JoinService = inject(JoinService);
+  private _router: Router = inject(Router);
+  public playlistNotFound: boolean = false;
 
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
@@ -35,7 +41,23 @@ export class LandingPage {
     window.location.href = 'http://127.0.0.1:8080/oauth2/authorization/spotify';
   }
 
-  public joinToSession(code: string) : void {
-    //TODO implement function
+  public joinToSession(req: JoinPlaylistReq) : void {
+    this.playlistNotFound = false;
+    console.log(req);
+    this._joinService.joinPlaylist(req).subscribe({
+        next: (resp) => {
+          console.log(resp);
+          this._router.navigate(["/suggestion-dashboard"], {
+            queryParams: {
+              name: resp.name,
+              deviceCode: resp.deviceCode,
+            }
+          });
+        },
+        error: (err) => {
+          console.log('Playlist not found');
+          this.playlistNotFound = true;
+        }
+      })
   }
 }

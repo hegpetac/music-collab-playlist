@@ -201,3 +201,41 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
+  /join-playlist:
+    post:
+      tags:
+        - Join
+      operationId: joinPlaylist
+      summary: Join a playlist by providing the current playlist name and code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/join-playlist-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './response/join-playlist-resp.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
