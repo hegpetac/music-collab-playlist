@@ -1,10 +1,8 @@
 package hu.hegpetac.music.collab.playlist.be.authentication.service;
 
-import hu.hegpetac.music.collab.playlist.be.authentication.entity.OAuthAccount;
 import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
 import hu.hegpetac.music.collab.playlist.be.authentication.entity.OAuthProvider;
 import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2User;
-import hu.hegpetac.music.collab.playlist.be.authentication.repository.OAuthAccountRepository;
 import hu.hegpetac.music.collab.playlist.be.authentication.repository.UserRepository;
 import hu.hegpetac.music.collab.playlist.be.dashboard.repository.DashboardSettingsRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +13,9 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Optional;
 
 @Service
@@ -29,7 +25,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
     private final UserRepository userRepository;
     private final DashboardSettingsRepository dashboardSettingsRepository;
-    private final OAuthAccountRepository accountRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -45,8 +40,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         User user;
 
         if (provider == OAuthProvider.GOOGLE) {
-            System.out.println("Inside goole auth FLOW IN CUSTOM SERVICE");
-            System.out.println("Google user: " + email);
             Optional<User> existingGoogleUser = userRepository.findByEmail(email);
             if (existingGoogleUser.isPresent()) {
                 user = existingGoogleUser.get();
@@ -57,21 +50,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 user = userRepository.save(user);
             }
         } else {
-            Optional<OAuthAccount> existingSpotifyAccount = accountRepository.findByProviderAndProviderUserId(provider, providerUserId);
-            if (existingSpotifyAccount.isPresent()) {
-                user = existingSpotifyAccount.get().getUser();
-                OAuthAccount account = existingSpotifyAccount.get();
-                updateSpotifyTokens(account, userRequest);
-                accountRepository.save(account);
+            Optional<User> existingSpotifyUser = userRepository.findBySpotifyPrincipalId(providerUserId);
+            if (existingSpotifyUser.isPresent()) {
+                user = existingSpotifyUser.get();
             } else {
                 user = existingSessionUser != null ? existingSessionUser : new User();
                 user.setDisplayName(oauth2User.getAttribute("display_name"));
-                OAuthAccount account = new OAuthAccount();
-                account.setProvider(provider);
-                account.setProviderUserId(providerUserId);
-                updateSpotifyTokens(account, userRequest);
-                accountRepository.save(account);
-                user.setSpotifyAccount(account);
+                user.setSpotifyPrincipalId(providerUserId);
                 user = userRepository.save(user);
             }
         }
@@ -92,22 +77,5 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         System.out.println("No authenticated user found in session");
         return null;
-    }
-
-    private void updateSpotifyTokens(OAuthAccount account, OAuth2UserRequest userRequest) {
-        account.setAccessToken(userRequest.getAccessToken().getTokenValue());
-        account.setAccessTokenExpiresAt(userRequest.getAccessToken().getExpiresAt());
-
-        try {
-            String refreshTokenString = (String) userRequest.getAdditionalParameters().get("refresh_token");
-            if (refreshTokenString != null) {
-                OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(refreshTokenString, Instant.now());
-                account.setRefreshToken(refreshToken.getTokenValue());
-                System.out.println("Updated SPOTIFY refresh token");
-            }
-        } catch (Exception e) {
-            System.err.println("Error updating SPOTIFY refresh token: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 }

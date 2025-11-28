@@ -25,10 +25,8 @@ public class User {
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
     private boolean enabled = true;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "spotify_account_id", referencedColumnName = "id")
-    private OAuthAccount spotifyAccount;
+    @Column(name = "spotify_principal_id")
+    private String spotifyPrincipalId;
 
     @OneToOne(mappedBy = "owner")
     private Playlist playlist;
