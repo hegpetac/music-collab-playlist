@@ -89,6 +89,18 @@ public class DashboardService {
         return new ModifyNameResp(dashboardSettings.getName());
     }
 
+    public User getPlaylistOwner(String playlistName, int deviceCode) throws NotFoundException {
+        Optional<DashboardSettings> existingDashboardSettings = dashboardSettingsRepository.findByNameAndDeviceCode(playlistName, deviceCode);
+        if (existingDashboardSettings.isEmpty()) {
+            throw new NotFoundException("No settings found for playlist " + playlistName);
+        }
+        return existingDashboardSettings.get().getUser();
+    }
+
+    public boolean doesPlaylistExist(String playlistName, int deviceCode) {
+        return dashboardSettingsRepository.findByNameAndDeviceCode(playlistName, deviceCode).isPresent();
+    }
+
     private DashboardSettings getDashboardFromAuthenticatedUserFromSession() throws UnauthorizedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {

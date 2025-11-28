@@ -68,7 +68,9 @@ public class SecurityConfig {
                                         "/login/**",
                                         "/login/oauth2/**",
                                         "/error",
-                                        "/join-playlist"
+                                        "/join-playlist",
+                                        "/suggest",
+                                        "/search"
                                 ).permitAll()
                                 .requestMatchers("/api/full/**").authenticated()
                                 .anyRequest().authenticated()

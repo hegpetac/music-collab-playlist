@@ -6,7 +6,6 @@ import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.JoinPlaylistReq;
 import org.openapitools.model.JoinPlaylistResp;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

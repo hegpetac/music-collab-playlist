@@ -1,0 +1,29 @@
+type: object
+properties:
+  provider:
+    $ref: "./../enum/provider.yaml"
+  providerId:
+    type: string
+  title:
+    type: string
+  artist:
+    type: string
+  album:
+    type: string
+  durationMs:
+    type: integer
+  externalUrl:
+    type: string
+    format: uri
+  previewUrl:
+    type: string
+    format: uri
+  thumbnail:
+    type: string
+  metadata:
+    type: object
+required:
+  - provider
+  - providerId
+  - title
+  - durationMs
