@@ -128,6 +128,9 @@ public class DashboardService {
     }
 
     private org.openapitools.model.DashboardSettings generateQRCodeUrl(org.openapitools.model.DashboardSettings dashboardSettings) {
+        if (dashboardSettings.getName() == null) {
+            return dashboardSettings;
+        }
         String QRCodeUrl = frontendBaseUrl + "/suggestion-dashboard?name=" + dashboardSettings.getName() + "&deviceCode=" + dashboardSettings.getDeviceCode();
         try {
             dashboardSettings.setQrBaseUrl(new URI(QRCodeUrl));

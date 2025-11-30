@@ -27,7 +27,7 @@ public class PostLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         if (user != null) {
             boolean hasGoogleLinked = user.getEmail() != null;
-            boolean hasSpotifyLinked = user.getSpotifyAccount() != null;
+            boolean hasSpotifyLinked = user.getSpotifyPrincipalId() != null;
 
             if (hasGoogleLinked && hasSpotifyLinked) {
                 response.sendRedirect("/dashboard");

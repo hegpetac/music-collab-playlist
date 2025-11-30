@@ -57,7 +57,7 @@ public class RequireBothProvidersFilter extends OncePerRequestFilter  {
         }
 
         User localUser = userRepository.findByEmail(email).orElse(null);
-        if (localUser == null || !(localUser.getEmail() != null && localUser.getSpotifyAccount() != null)) {
+        if (localUser == null || !(localUser.getEmail() != null && localUser.getSpotifyPrincipalId() != null)) {
             response.sendRedirect("/connect");
             return;
         }

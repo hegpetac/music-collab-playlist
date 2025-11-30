@@ -4,28 +4,20 @@ import hu.hegpetac.music.collab.playlist.be.authentication.filter.RequireBothPro
 import hu.hegpetac.music.collab.playlist.be.authentication.repository.UserRepository;
 import hu.hegpetac.music.collab.playlist.be.authentication.service.CustomOAuth2UserService;
 import hu.hegpetac.music.collab.playlist.be.authentication.service.PostLoginSuccessHandler;
+import hu.hegpetac.music.collab.playlist.be.authentication.service.SpotifyAuthorizedClientService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,7 +66,6 @@ public class SecurityConfig {
                                 ).permitAll()
                                 .requestMatchers("/api/full/**").authenticated()
                                 .anyRequest().authenticated()
-                        //TODO tovabbi vegpontok felvetele kesobbiekben
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
                 .oauth2Login(oauth -> oauth
@@ -107,32 +98,8 @@ public class SecurityConfig {
         return source;
     }
 
-
     @Bean
-    public OAuth2AuthorizedClientService authorizedClientService(
-            DataSource dataSource,
-            ClientRegistrationRepository clientRegistrationRepository
-    ) {
-        JdbcOperations jdbcOperations = new JdbcTemplate(dataSource);
-        return new JdbcOAuth2AuthorizedClientService(jdbcOperations, clientRegistrationRepository);
+    public OAuth2AuthorizedClientService authorizedClientService(SpotifyAuthorizedClientService service) {
+        return service;
     }
-
-    @Bean
-    public OAuth2AuthorizedClientManager authorizedClientManager(ClientRegistrationRepository clients,
-                                                                 OAuth2AuthorizedClientService clientService) {
-        AuthorizedClientServiceOAuth2AuthorizedClientManager manager =
-                new AuthorizedClientServiceOAuth2AuthorizedClientManager(clients, clientService);
-        return manager;
-    }
-
-    @Bean
-    public WebClient webClient(OAuth2AuthorizedClientManager manager) {
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(manager);
-        oauth2.setDefaultOAuth2AuthorizedClient(true);
-        return WebClient.builder()
-                .apply(oauth2.oauth2Configuration())
-                .build();
-    }
-
 }
