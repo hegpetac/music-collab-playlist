@@ -1,1 +1,96 @@
-<p>suggestion-dashboard works!</p>
+<div class="suggestion-container">
+  <div class="provider">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Spotify</mat-label>
+      <input
+        matInput
+        type="text"
+        [value]="spotifyQuery()"
+        (input)="spotifyQuery.set($any($event.target).value)"
+        [matAutocomplete]="spotifyAuto"
+        class="search-input"
+      />
+
+      @if(selectedSpotify()) {
+      <button mat-icon-button matSuffix (click)="clearSpotifySelection()">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+
+      <mat-autocomplete
+        #spotifyAuto="matAutocomplete"
+        (optionSelected)="onSpotifySelected($event.option.value)"
+        class="option-container"
+      >
+        @for (item of spotifyResults(); track item.title) {
+          <mat-option [value]="item" class="option-tag">
+            <div class="option-row">
+              @if(item.thumbnail) {
+                <img class="thumb" [src]="item.thumbnail" alt="Cannot find provided picture"/>
+              }
+              <div class="title">{{item.title}}</div>
+              <div class="subtitle">
+                {{item.artist}}
+                • {{ (item.durationMs/1000) | number:'1.0-0' }}s
+              </div>
+            </div>
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="!selectedSpotify()"
+      (click)="suggestSpotify()">
+      Suggest Track
+    </button>
+  </div>
+  <div class="provider">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search YouTube</mat-label>
+      <input
+        matInput
+        type="text"
+        [value]="youtubeQuery()"
+        (input)="youtubeQuery.set($any($event.target).value)"
+        [matAutocomplete]="youtubeAuto"
+        class="search-input"
+      />
+
+      @if(selectedYoutube()) {
+        <button mat-icon-button matSuffix (click)="clearYouTubeSelection()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+
+      <mat-autocomplete
+        #youtubeAuto="matAutocomplete"
+        (optionSelected)="onYoutubeSelected($event.option.value)">
+        @for (item of youtubeResults(); track item.title) {
+          <mat-option [value]="item" class="option-tag">
+            <div class="option-row">
+              @if(item.thumbnail) {
+                <img class="thumb" [src]="item.thumbnail" alt="Cannot find provided picture"/>
+              }
+              <div class="title">{{item.title}}</div>
+              <div class="subtitle">
+                {{item.artist}}
+                • {{ (item.durationMs/1000) | number:'1.0-0' }}s
+              </div>
+            </div>
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="!selectedYoutube()"
+      (click)="suggestYoutube()">
+      Suggest Track
+    </button>
+  </div>
+</div>

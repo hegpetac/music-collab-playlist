@@ -5,7 +5,7 @@
   justify-content: center;
   height: 100%;
   background-color: #121212;
-  color: white;
+  color: #fbfbfb;
   text-align: center;
   padding: 2rem 2rem 0 2rem;
 }
@@ -32,7 +32,7 @@ p {
     text-align: center;
     font-size: 2rem;
     font-weight: 600;
-    color: white;
+    color: #fbfbfb;
   }
 
   .mat-mdc-form-field-outline {

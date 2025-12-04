@@ -9,3 +9,8 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.mat-mdc-autocomplete-panel.mdc-menu-surface {
+  background-color: #2a2a2a;
+}
+

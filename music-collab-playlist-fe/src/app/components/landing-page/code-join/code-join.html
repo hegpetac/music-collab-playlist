@@ -1,7 +1,8 @@
 <div class="join-container">
   <p style="font-size: medium">Enter the name and 6-digit code to join someone else's playlist</p>
-  <mat-form-field class="name-field">
-    <input matInput type="text" placeholder="Playlist's name" [(ngModel)]="playlistName">
+  <mat-form-field appearance="outline" class="name-field">
+    <mat-label>Playlist's name</mat-label>
+    <input matInput type="text" [(ngModel)]="playlistName" style="color: #fbfbfb !important">
   </mat-form-field>
   <div class="code-inputs">
     @for (digit of code; track $index; let i = $index) {

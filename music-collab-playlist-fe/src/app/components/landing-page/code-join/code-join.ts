@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Output, QueryList, ViewChildren} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatFormField} from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
 import {JoinPlaylistReq} from '../../../../openapi';
@@ -13,6 +13,7 @@ import {JoinPlaylistReq} from '../../../../openapi';
     FormsModule,
     MatButton,
     MatInput,
+    MatLabel,
   ],
   templateUrl: './code-join.html',
   styleUrl: './code-join.css'
