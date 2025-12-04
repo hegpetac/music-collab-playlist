@@ -20,6 +20,7 @@ public class SearchController implements SearchApi {
 
     @Override
     public ResponseEntity<List<TrackSummary>> searchMusic(SearchReq searchReq) {
+        System.out.println("Search request for provider "  + searchReq.getProvider() + " with query: " + searchReq.getQuery());
         switch (searchReq.getProvider()) {
             case SPOTIFY -> {
                 return ResponseEntity.ok(spotifySearchService.searchMusic(searchReq));

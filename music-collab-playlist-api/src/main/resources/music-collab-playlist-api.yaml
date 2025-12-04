@@ -240,7 +240,7 @@ paths:
                 $ref: './error/not-found.yaml'
 
   /search:
-    get:
+    post:
       tags:
         - Search
       operationId: searchMusic

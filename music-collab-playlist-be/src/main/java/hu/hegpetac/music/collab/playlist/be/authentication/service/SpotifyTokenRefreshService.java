@@ -54,20 +54,24 @@ public class SpotifyTokenRefreshService {
                 .bodyToMono(SpotifyTokenResponse.class)
                 .block();
 
+        Instant newIssuedAt = Instant.now();
+        Instant newExpiresAt = newIssuedAt.plusSeconds(resp.expires_in());
+
         OAuth2AuthorizedClient updated = new OAuth2AuthorizedClient(
                 registration,
                 principal,
                 new OAuth2AccessToken(
                         OAuth2AccessToken.TokenType.BEARER,
                         resp.access_token(),
-                        Instant.now(),
-                        Instant.now().plusSeconds(resp.expires_in()),
+                        newIssuedAt,
+                        newExpiresAt,
                         resp.scope() != null
                                 ? Set.of(resp.scope().split(" "))
                                 : client.getAccessToken().getScopes()
                 ),
                 client.getRefreshToken()
         );
+        System.out.println("New expires at: " + newExpiresAt);
 
         authorizedClientService.saveAuthorizedClient(updated, null);
 

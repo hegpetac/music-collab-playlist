@@ -7,5 +7,6 @@ public record SpotifyTokenEntity(
         String accessToken,
         String refreshToken,
         Instant expiresAt,
+        Instant issuedAt,
         String scopes
 ) {}

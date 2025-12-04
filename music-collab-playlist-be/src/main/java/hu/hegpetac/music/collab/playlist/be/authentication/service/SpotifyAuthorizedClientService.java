@@ -32,15 +32,12 @@ public class SpotifyAuthorizedClientService implements OAuth2AuthorizedClientSer
         OAuth2AccessToken token = new OAuth2AccessToken(
                 OAuth2AccessToken.TokenType.BEARER,
                 entity.accessToken(),
-                Instant.now(),          // token issued (optional approximation)
+                entity.issuedAt(),
                 entity.expiresAt(),
                 Set.of(entity.scopes().split(" "))
         );
         OAuth2RefreshToken refreshToken = entity.refreshToken() == null ? null :
-                new OAuth2RefreshToken(
-                        entity.refreshToken(),
-                        Instant.now()
-                );
+                new OAuth2RefreshToken(entity.refreshToken(), null);
 
         return (T) new OAuth2AuthorizedClient(
                 registration,
@@ -54,12 +51,13 @@ public class SpotifyAuthorizedClientService implements OAuth2AuthorizedClientSer
     public void saveAuthorizedClient(OAuth2AuthorizedClient client, Authentication principal) {
 
         SpotifyTokenEntity entity = new SpotifyTokenEntity(
-                principal.getName(),
+                client.getPrincipalName(),
                 client.getAccessToken().getTokenValue(),
                 client.getRefreshToken() != null
                         ? client.getRefreshToken().getTokenValue()
                         : null,
                 client.getAccessToken().getExpiresAt(),
+                client.getAccessToken().getIssuedAt(),
                 String.join(" ", client.getAccessToken().getScopes())
         );
 

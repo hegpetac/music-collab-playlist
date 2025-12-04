@@ -22,6 +22,7 @@ public class SpotifyTokenRepository {
                         rs.getString("access_token"),
                         rs.getString("refresh_token"),
                         rs.getTimestamp("expires_at").toInstant(),
+                        rs.getTimestamp("issued_at").toInstant(),
                         rs.getString("scopes")
                 )
                         : null,
@@ -32,15 +33,16 @@ public class SpotifyTokenRepository {
     public void save(SpotifyTokenEntity e) {
         jdbc.update("""
             INSERT INTO user_spotify_tokens
-                (user_id, access_token, refresh_token, expires_at, scopes)
-            VALUES (?, ?, ?, ?, ?)
+                (user_id, access_token, refresh_token, issued_at, expires_at, scopes)
+            VALUES (?, ?, ?, ?, ?, ?)
             ON CONFLICT (user_id)
             DO UPDATE SET
                 access_token = EXCLUDED.access_token,
                 refresh_token = EXCLUDED.refresh_token,
+                issued_at = EXCLUDED.issued_at,
                 expires_at = EXCLUDED.expires_at,
                 scopes = EXCLUDED.scopes
-        """, e.userId(), e.accessToken(), e.refreshToken(), Timestamp.from(e.expiresAt()), e.scopes());
+        """, e.userId(), e.accessToken(), e.refreshToken(), Timestamp.from(e.issuedAt()), Timestamp.from(e.expiresAt()), e.scopes());
     }
 
     public void delete(String userId) {
