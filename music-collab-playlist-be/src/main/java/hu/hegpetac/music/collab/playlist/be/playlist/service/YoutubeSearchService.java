@@ -15,6 +15,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,7 +104,7 @@ public class YoutubeSearchService {
                     dto.setProviderId(e.getKey());
                     dto.setTitle(e.getValue().get("title"));
                     dto.setArtist(e.getValue().get("artist"));
-                    dto.setThumbnail(e.getValue().get("thumbnail"));
+                    dto.setThumbnail(extractUrl(e.getValue().get("thumbnail")));
                     dto.setDurationMs(durations.getOrDefault(e.getKey(), 0) * 1000);
                     return dto;
                 })
@@ -117,5 +119,18 @@ public class YoutubeSearchService {
             if (m.group(2) != null) seconds = Integer.parseInt(m.group(2));
         }
         return minutes * 60 + seconds;
+    }
+
+    private String extractUrl(String input) {
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
+
+        Matcher matcher = Pattern.compile("(?<=url=)(.*?)(?=,|})").matcher(input);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+
+        return "";
     }
 }
