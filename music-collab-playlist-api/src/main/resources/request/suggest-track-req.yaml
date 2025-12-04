@@ -1,0 +1,11 @@
+type: object
+properties:
+  playlistName:
+    type: string
+  deviceCode:
+    type: integer
+    maximum: 999999
+    minimum: 100000
+    description: 6-digit code (server generated)
+  track:
+    $ref: './../model/track-summary.yaml'

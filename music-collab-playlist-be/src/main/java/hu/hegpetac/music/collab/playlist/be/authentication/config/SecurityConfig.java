@@ -61,7 +61,7 @@ public class SecurityConfig {
                                         "/login/oauth2/**",
                                         "/error",
                                         "/join-playlist",
-                                        "/suggest",
+                                        "/suggest-track",
                                         "/search"
                                 ).permitAll()
                                 .requestMatchers("/api/full/**").authenticated()

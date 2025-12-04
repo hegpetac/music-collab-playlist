@@ -278,42 +278,42 @@ paths:
             application/json:
               schema:
                 $ref: './error/not-found.yaml'
-#
-#  /suggest-track:
-#    post:
-#      tags:
-#        - Suggest
-#      operationId: suggestTrack
-#      summary: Suggest a track for the joined playlist
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref:
-#      responses:
-#        '200':
-#          description: 'Success'
-#          content:
-#            application/json:
-#              schema:
-#                $ref:
-#        '400':
-#          description: 'Bad Request'
-#          content:
-#            application/json:
-#              schema:
-#                $ref: './error/bad-request.yaml'
-#        '403':
-#          description: 'Unauthorized'
-#          content:
-#            application/json:
-#              schema:
-#                $ref: './error/unauthorized.yaml'
-#        '404':
-#          description: 'Not Found'
-#          content:
-#            application/json:
-#              schema:
-#                $ref: './error/not-found.yaml'
+
+  /suggest-track:
+    post:
+      tags:
+        - Suggest
+      operationId: suggestTrack
+      summary: Suggest a track for the joined playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/suggest-track-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './model/playlist.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
 
