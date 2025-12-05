@@ -15,6 +15,7 @@ import java.util.List;
 public class SuggestionService {
     private final SuggestionRegistry registry;
     private final DashboardOrchestrator dashboardOrchestrator;
+    private final ModelUpdateNotifier notifier;
 
     public List<TrackSummary> handleSuggestion(SuggestTrackReq suggestTrackReq) {
         if (!dashboardOrchestrator.doesPlaylistExist(suggestTrackReq.getPlaylistName(), suggestTrackReq.getDeviceCode())) {
@@ -36,9 +37,9 @@ public class SuggestionService {
         }
 
         registry.addTrack(suggestTrackReq.getPlaylistName(), suggestTrackReq.getTrack());
+        List<TrackSummary> updatedSuggestions = registry.findSuggestions(suggestTrackReq.getPlaylistName()).get();
 
-        //TODO notifymodel
-
-        return registry.findSuggestions(suggestTrackReq.getPlaylistName()).get();
+        notifier.notifySuggestionsUpdated(suggestTrackReq.getPlaylistName(), updatedSuggestions);
+        return updatedSuggestions;
     }
 }

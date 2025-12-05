@@ -62,7 +62,8 @@ public class SecurityConfig {
                                         "/error",
                                         "/join-playlist",
                                         "/suggest-track",
-                                        "/search"
+                                        "/search",
+                                        "/ws/**"
                                 ).permitAll()
                                 .requestMatchers("/api/full/**").authenticated()
                                 .anyRequest().authenticated()
