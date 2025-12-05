@@ -1,5 +1,6 @@
 package hu.hegpetac.music.collab.playlist.be.dashboard.controller;
 
+import hu.hegpetac.music.collab.playlist.be.dashboard.orchestrator.DashboardOrchestrator;
 import hu.hegpetac.music.collab.playlist.be.dashboard.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.*;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class DashboardController implements org.openapitools.api.DashboardApi {
     private final DashboardService dashboardService;
+    private final DashboardOrchestrator dashboardOrchestrator;
 
     @Override
     public ResponseEntity<DashboardSettings> getDashboardSettings() {
@@ -34,6 +36,6 @@ public class DashboardController implements org.openapitools.api.DashboardApi {
 
     @Override
     public ResponseEntity<ModifyNameResp> setName(ModifyNameReq modifyNameReq) {
-        return ResponseEntity.ok(dashboardService.modifyName(modifyNameReq));
+        return ResponseEntity.ok(dashboardOrchestrator.modifyName(modifyNameReq));
     }
 }

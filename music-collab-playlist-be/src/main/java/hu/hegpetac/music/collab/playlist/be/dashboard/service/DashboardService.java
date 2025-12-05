@@ -4,6 +4,7 @@ import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
 import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2User;
 import hu.hegpetac.music.collab.playlist.be.dashboard.entity.DashboardSettings;
 import hu.hegpetac.music.collab.playlist.be.dashboard.mapper.DashboardMapper;
+import hu.hegpetac.music.collab.playlist.be.dashboard.model.ModifyNameDetails;
 import hu.hegpetac.music.collab.playlist.be.dashboard.repository.DashboardSettingsRepository;
 import hu.hegpetac.music.collab.playlist.be.exception.BadRequestException;
 import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
@@ -76,8 +77,9 @@ public class DashboardService {
         return dashboardMapper.mapYoutubePlaybackMode(dashboardSettings.getYoutubePlaybackMode());
     }
 
-    public ModifyNameResp modifyName(ModifyNameReq modifyNameReq) throws UnauthorizedException, NotFoundException, BadRequestException {
+    public ModifyNameDetails modifyName(ModifyNameReq modifyNameReq) throws UnauthorizedException, NotFoundException, BadRequestException {
         DashboardSettings dashboardSettings = getDashboardFromAuthenticatedUserFromSession();
+        String oldName = dashboardSettings.getName();
         dashboardSettingsRepository.findByName(modifyNameReq.getName())
                 .ifPresent(_ -> {
                     throw new BadRequestException("Name already exists: " + modifyNameReq.getName());
@@ -85,8 +87,9 @@ public class DashboardService {
 
         dashboardSettings.setName(modifyNameReq.getName());
         dashboardSettings = dashboardSettingsRepository.save(dashboardSettings);
+        ModifyNameResp resp = new ModifyNameResp(dashboardSettings.getName());
 
-        return new ModifyNameResp(dashboardSettings.getName());
+        return new ModifyNameDetails(oldName, resp);
     }
 
     public User getPlaylistOwner(String playlistName, int deviceCode) throws NotFoundException {
