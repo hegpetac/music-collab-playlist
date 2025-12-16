@@ -1,6 +1,9 @@
 package hu.hegpetac.music.collab.playlist.be.playlist.service;
 
+import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
+import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2User;
 import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
+import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
 import hu.hegpetac.music.collab.playlist.be.playlist.orchestrator.PlaylistOrchestrator;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +11,9 @@ import org.openapitools.model.Provider;
 import org.openapitools.model.SearchReq;
 import org.openapitools.model.TrackSummary;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -36,20 +42,31 @@ public class YoutubeSearchService {
                 .build();
     }
 
+    public List<TrackSummary> searchAsOwner(String query) throws UnauthorizedException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            throw new UnauthorizedException("Not found logged in user");
+        }
+
+        return searchYouTubeAPI(query);
+    }
+
     public List<TrackSummary> searchMusic(SearchReq searchReq) throws NotFoundException{
         if (!playlistOrchestrator.doesPlaylistExist(searchReq.getPlaylistName(), searchReq.getDeviceCode())) {
             throw new NotFoundException("Playlist " + searchReq.getPlaylistName() + " does not exist");
         }
 
-        System.out.println(youtubeApiKey + "ASDFSADFSADFASF");
+        return searchYouTubeAPI(searchReq.getQuery());
+    }
 
+    private List<TrackSummary> searchYouTubeAPI(String query) {
         Map<String, Map<String, String>> results = client.get()
                 .uri(uri -> uri.path("/search")
                         .queryParam("key", youtubeApiKey)
                         .queryParam("part", "snippet")
                         .queryParam("type", "video")
                         .queryParam("maxResults", 5)
-                        .queryParam("q", searchReq.getQuery())
+                        .queryParam("q", query)
                         .build())
                 .retrieve()
                 .bodyToMono(Map.class)

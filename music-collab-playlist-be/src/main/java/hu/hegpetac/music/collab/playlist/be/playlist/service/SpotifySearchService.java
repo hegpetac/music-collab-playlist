@@ -1,12 +1,18 @@
 package hu.hegpetac.music.collab.playlist.be.playlist.service;
 
+import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
+import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2User;
 import hu.hegpetac.music.collab.playlist.be.authentication.service.SpotifyTokenRefreshService;
 import hu.hegpetac.music.collab.playlist.be.dashboard.orchestrator.DashboardOrchestrator;
+import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.Provider;
 import org.openapitools.model.SearchReq;
 import org.openapitools.model.TrackSummary;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,6 +31,24 @@ public class SpotifySearchService {
 
     public List<TrackSummary> searchMusic(SearchReq searchReq) {
         String spotifyPrincipalId = dashboardOrchestrator.getPlaylistOwner(searchReq.getPlaylistName(), searchReq.getDeviceCode()).getSpotifyPrincipalId();
+
+        return searchSpotifyAPI(searchReq.getQuery(), spotifyPrincipalId);
+    }
+
+    public List<TrackSummary> searchAsOwner(String query) throws UnauthorizedException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            if (authentication.getPrincipal() instanceof CustomOAuth2User customOAuth2User) {
+                User sessionUser = customOAuth2User.getUser();
+                System.out.println("Found authenticated user in session: " + sessionUser.getId());
+                return searchSpotifyAPI(query, sessionUser.getSpotifyPrincipalId());
+            }
+        }
+
+        throw new UnauthorizedException("Not found logged in user");
+    }
+
+    private List<TrackSummary> searchSpotifyAPI(String query, String spotifyPrincipalId) {
         OAuth2AuthorizedClient client = spotifyTokenRefreshService.refreshIfNeeded(spotifyPrincipalId);
 
         if (client == null || client.getAccessToken() == null) {
@@ -36,7 +60,7 @@ public class SpotifySearchService {
 
         SpotifySearchResponse response = webClient.get()
                 .uri(uri -> uri.path("/search")
-                        .queryParam("q", searchReq.getQuery())
+                        .queryParam("q", query)
                         .queryParam("type", "track")
                         .queryParam("limit", 5)
                         .build())

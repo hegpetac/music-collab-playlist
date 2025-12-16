@@ -4,7 +4,7 @@ services:
   backend:
     image: music-collab-playlist-be
     ports:
-      - 8080:8080
+      - "8080:8080"
     container_name: backend
     env_file:
       - .env
@@ -41,8 +41,8 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: a@a.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     depends_on:
       - db
 

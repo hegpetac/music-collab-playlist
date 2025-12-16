@@ -5,6 +5,7 @@ import hu.hegpetac.music.collab.playlist.be.playlist.service.SpotifySearchServic
 import hu.hegpetac.music.collab.playlist.be.playlist.service.YoutubeSearchService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.SearchApi;
+import org.openapitools.model.OwnerSearchReq;
 import org.openapitools.model.SearchReq;
 import org.openapitools.model.TrackSummary;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,19 @@ public class SearchController implements SearchApi {
                 return ResponseEntity.ok(youtubeSearchService.searchMusic(searchReq));
             }
             default -> throw new BadRequestException("Unknown provider: " + searchReq.getProvider());
+        }
+    }
+
+    @Override
+    public ResponseEntity<List<TrackSummary>> searchAsOwner(OwnerSearchReq ownerSearchReq) {
+        switch (ownerSearchReq.getProvider()) {
+            case SPOTIFY -> {
+                return ResponseEntity.ok(spotifySearchService.searchAsOwner(ownerSearchReq.getQuery()));
+            }
+            case YOUTUBE -> {
+                return ResponseEntity.ok(youtubeSearchService.searchAsOwner(ownerSearchReq.getQuery()));
+            }
+            default -> throw new BadRequestException("Unknown provider: " + ownerSearchReq.getProvider());
         }
     }
 }
