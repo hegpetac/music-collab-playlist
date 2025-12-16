@@ -317,3 +317,147 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
+  /handle-playlist/search:
+    post:
+      tags:
+        - Search
+      operationId: searchAsOwner
+      summary: Search Spotify or YouTube for tracks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/owner-search-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './model/track-summary.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+                
+  /handle-playlisy/add-track:
+    post:
+      tags:
+        - Handle Playlist
+      operationId: addTrack
+      summary: Add track to the owned playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/add-track-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /handle-playlist/reorder-queue:
+    post:
+      tags:
+        - Handle Playlist
+      operationId: reorderQueue
+      summary: Reorder the tracks in the queue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/reorder-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /handle-playlist/reorder-recommendations:
+    post:
+      tags:
+        - Handle Playlist
+      operationId: reorderRecommendations
+      summary: Reorder the tracks the recommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/reorder-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+

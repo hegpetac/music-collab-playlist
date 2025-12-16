@@ -1,0 +1,4 @@
+type: object
+properties:
+  track:
+    $ref: './../model/track-summary.yaml'
