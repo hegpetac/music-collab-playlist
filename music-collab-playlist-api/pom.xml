@@ -6,7 +6,7 @@
 
     <groupId>hu.hegpetac</groupId>
     <artifactId>music-collab-playlist-api</artifactId>
-    <version>1.1.25</version>
+    <version>1.1.27</version>
     <packaging>jar</packaging>
 
     <build>

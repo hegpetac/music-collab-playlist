@@ -471,9 +471,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: './model/provider-id-list.yaml'
+              $ref: './model/provider-id-list.yaml'
       responses:
         '200':
           description: 'Success'
@@ -496,12 +494,12 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
-  /handle-playlist/delete-recommendation:
+  /handle-playlist/delete-suggestion:
     post:
       tags:
         - Handle Playlist
-      operationId: deleteRecommendation
-      summary: Delete a tracks from the recommendations
+      operationId: deleteSuggestion
+      summary: Delete a tracks from the suggestions
       requestBody:
         required: true
         content:

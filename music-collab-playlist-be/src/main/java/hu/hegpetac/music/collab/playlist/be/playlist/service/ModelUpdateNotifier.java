@@ -16,7 +16,7 @@ public class ModelUpdateNotifier {
         messagingTemplate.convertAndSend("/topic/suggestions/" + playlistName, newList);
     }
 
-    public void modifyQueueUpdated(String playlistName, List<TrackSummary> queue) {
+    public void notifyQueueUpdated(String playlistName, List<TrackSummary> queue) {
         messagingTemplate.convertAndSend("/topic/queue/" + playlistName, queue);
     }
 
