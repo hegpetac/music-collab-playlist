@@ -392,18 +392,18 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
-  /handle-playlist/reorder-queue:
+  /handle-playlist/add-suggested-track:
     post:
       tags:
         - Handle Playlist
-      operationId: reorderQueue
-      summary: Reorder the tracks in the queue
+      operationId: addSuggestedTrack
+      summary: Add track suggested by the users to the queue
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './request/reorder-req.yaml'
+              $ref: './request/add-existing-track-req.yaml'
       responses:
         '200':
           description: 'Success'
@@ -426,18 +426,88 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
-  /handle-playlist/reorder-recommendations:
+  /handle-playlist/add-recommended-track:
     post:
       tags:
         - Handle Playlist
-      operationId: reorderRecommendations
-      summary: Reorder the tracks the recommendations
+      operationId: addRecommendedTrack
+      summary: Add track recommended by the Spotify API to the queue
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './request/reorder-req.yaml'
+              $ref: './request/add-existing-track-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /handle-playlist/reorder-queue:
+    post:
+      tags:
+        - Handle Playlist
+      operationId: reorderQueue
+      summary: Reorder the tracks in the queue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: './model/provider-id-list.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /handle-playlist/delete-recommendation:
+    post:
+      tags:
+        - Handle Playlist
+      operationId: deleteRecommendation
+      summary: Delete a tracks from the recommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/delete-track-req.yaml'
       responses:
         '200':
           description: 'Success'

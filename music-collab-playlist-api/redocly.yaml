@@ -1,7 +1,6 @@
 extends:
   - recommended
 
-lint:
-  rules:
-    info-license:
-      severity: off
+rules:
+  info-license:
+    severity: off

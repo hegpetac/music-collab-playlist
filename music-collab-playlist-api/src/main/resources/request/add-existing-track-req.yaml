@@ -1,0 +1,7 @@
+type: object
+properties:
+  track:
+    $ref: './../model/track-summary.yaml'
+  order:
+    $ref: './../model/provider-id-list.yaml'
+
