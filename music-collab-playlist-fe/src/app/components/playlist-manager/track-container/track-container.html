@@ -1,0 +1,15 @@
+<div cdkDrag class="track-container">
+  <div class="track">
+    <img class="thumb" [src]="item.thumbnail" alt="Not found"/>
+    <div class="track-details">
+      <div class="title">{{item.title}}</div>
+      <div class="subtitle">
+        {{item.artist}}
+        • {{ (item.durationMs/1000) | number:'1.0-0' }}s
+      </div>
+    </div>
+  </div>
+  <button mat-icon-button class="delete-track-button" (click)="emitDelete(item)">
+    <mat-icon fontIcon="delete_outline"/>
+  </button>
+</div>

@@ -1,0 +1,45 @@
+.track-handler {
+  display: flex;
+  gap: 2vw;
+  width: 90vw;
+  justify-content: space-evenly;
+  padding: 18px;
+  border-radius: 18px;
+  color: #fbfbfb;
+  height: 80vh;
+}
+
+.drop-list-column-container {
+  width: 30vw;
+  background-color: #121212;
+}
+
+.list-header {
+  margin: 2.5vh;
+}
+
+.drop-list {
+  display: flex;
+  flex-direction: column;
+  height: 75vh;
+  margin: 2.5vh;
+  gap: 0.5vh;
+}
+
+.target-column {
+  transition: background-color 0.2s ease, border 0.2s ease;
+  border: 2px dashed transparent;
+}
+
+.target-column.cdk-drop-list-receiving {
+  background-color: rgba(0, 82, 204, 0.05);
+  border: 2px dashed #0052cc;
+}
+
+.target-column.cdk-drop-list-dragging {
+  background-color: rgba(0, 82, 204, 0.05);
+  border: 2px dashed #0052cc;
+}
+
+
+

@@ -1,1 +1,45 @@
-<p>playlist-manager works!</p>
+<div>Search component placeholder</div>
+
+<div class="track-handler">
+  <div class="drop-list-column-container">
+    <h3 class="list-header">Queue</h3>
+    <div cdkDropList
+         id="queue"
+         [cdkDropListData]="queue"
+         (cdkDropListDropped)="onQueueDrop($event)"
+         class="drop-list target-column"
+    >
+      @for(item of queue; track item.providerId) {
+        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, queue)"/>
+      }
+    </div>
+  </div>
+
+  <div class="drop-list-column-container">
+    <h3 class="list-header">Recommendations</h3>
+    <div cdkDropList
+         id="recommendations"
+         [cdkDropListData]="recommendations"
+         [cdkDropListConnectedTo]="['queue']"
+         class="drop-list"
+    >
+      @for(item of recommendations; track item.providerId) {
+        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, recommendations)"/>
+      }
+    </div>
+  </div>
+
+  <div class="drop-list-column-container">
+    <h3 class="list-header">Suggestions</h3>
+    <div cdkDropList
+         id="suggestions"
+         [cdkDropListData]="suggestions"
+         [cdkDropListConnectedTo]="['queue']"
+         class="drop-list"
+    >
+      @for(item of suggestions; track item.providerId) {
+        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, suggestions)"/>
+      }
+    </div>
+  </div>
+</div>
