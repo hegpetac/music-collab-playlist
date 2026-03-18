@@ -25,8 +25,8 @@ public class PlaylistController implements HandlePlaylistApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteSuggestion(DeleteTrackReq deleteTrackReq) {
-        playlistService.deleteSuggestion(deleteTrackReq);
+    public ResponseEntity<Void> deleteTrack(DeleteTrackReq deleteTrackReq) {
+        playlistService.deleteTrack(deleteTrackReq);
         return ResponseEntity.ok().build();
     }
 
@@ -43,7 +43,7 @@ public class PlaylistController implements HandlePlaylistApi {
     }
 
     @Override
-    public ResponseEntity<Void> reorderQueue(List<@Valid ProviderIdListInner> providerIdListInner) {
+    public ResponseEntity<Void> reorderQueue(List<ProviderIdListInner> providerIdListInner) {
         playlistService.reorderQueue(providerIdListInner);
         return ResponseEntity.ok().build();
     }

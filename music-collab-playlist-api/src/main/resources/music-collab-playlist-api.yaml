@@ -357,7 +357,7 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
                 
-  /handle-playlisy/add-track:
+  /handle-playlist/add-track:
     post:
       tags:
         - Handle Playlist
@@ -494,11 +494,11 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
-  /handle-playlist/delete-suggestion:
+  /handle-playlist/delete-track:
     post:
       tags:
         - Handle Playlist
-      operationId: deleteSuggestion
+      operationId: deleteTrack
       summary: Delete a tracks from the suggestions
       requestBody:
         required: true

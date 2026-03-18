@@ -10,14 +10,14 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class SuggestionRegistry {
+public class TrackRegistry {
     private final ConcurrentHashMap<String, List<TrackSummary>> playlists = new ConcurrentHashMap<>();
 
     public void registerPlaylist(String playlistName) {
         playlists.putIfAbsent(playlistName, Collections.synchronizedList(new ArrayList<>()));
     }
 
-    public Optional<List<TrackSummary>> findSuggestions(String playlistName) {
+    public Optional<List<TrackSummary>> findTrackList(String playlistName) {
         return Optional.ofNullable(playlists.get(playlistName));
     }
 
@@ -34,14 +34,14 @@ public class SuggestionRegistry {
         playlists.put(newName, existing);
     }
 
-    public boolean deleteTrack(String playlistName, String providerId) {
+    public void deleteTrack(String playlistName, String providerId) {
         List<TrackSummary> tracks = playlists.get(playlistName);
         if (tracks ==null) {
-            return false;
+            return;
         }
 
         synchronized (tracks) {
-            return tracks.removeIf(track -> track.getProviderId().equals(providerId));
+            tracks.removeIf(track -> track.getProviderId().equals(providerId));
         }
     }
 

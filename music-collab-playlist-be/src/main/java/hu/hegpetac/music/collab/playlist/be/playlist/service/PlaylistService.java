@@ -6,7 +6,7 @@ import hu.hegpetac.music.collab.playlist.be.dashboard.entity.DashboardSettings;
 import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
 import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.QueueRegistry;
-import hu.hegpetac.music.collab.playlist.be.playlist.registry.SuggestionRegistry;
+import hu.hegpetac.music.collab.playlist.be.playlist.registry.TrackRegistry;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.*;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -20,46 +20,50 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaylistService {
     private final ModelUpdateNotifier notifier;
-    private final SuggestionRegistry suggestionRegistry;
+    private final TrackRegistry trackRegistry;
     private final QueueRegistry queueRegistry;
 
     public void addTrack(AddTrackReq addTrackReq) {
         String playlistName = getPlaylistFromSession().getName();
         queueRegistry.registerPlaylist(playlistName);
-        var queueOpt = queueRegistry.findQueue(playlistName);
+        var queueOpt = queueRegistry.findTrackList(playlistName);
 
         if (queueOpt.isEmpty()) {
             throw new NotFoundException("Queue not found: " + playlistName);
         }
 
         queueRegistry.addTrack(playlistName, addTrackReq.getTrack());
-        List<TrackSummary> updatedQueue = queueRegistry.findQueue(playlistName).get();
+        List<TrackSummary> updatedQueue = queueRegistry.findTrackList(playlistName).get();
 
         notifier.notifyQueueUpdated(playlistName, updatedQueue);
     }
 
-    public void deleteSuggestion(DeleteTrackReq deleteTrackReq) {
+    public void deleteTrack(DeleteTrackReq deleteTrackReq) {
         String playlistName = getPlaylistFromSession().getName();
-        List<TrackSummary> suggestions = suggestionRegistry.findSuggestions(playlistName).get();
-        if (suggestions.stream().anyMatch(r -> r.getProviderId().equals(deleteTrackReq.getProviderId()) && r.getProvider().equals(deleteTrackReq.getProvider()))) {
-            suggestionRegistry.deleteTrack(playlistName, deleteTrackReq.getProviderId());
-            List<TrackSummary> newSuggestions = suggestionRegistry.findSuggestions(playlistName).get();
-            notifier.notifySuggestionsUpdated(playlistName, newSuggestions);
+        TrackRegistry registry = resolveRegistry(deleteTrackReq.getList());
+        List<TrackSummary> tracks = registry.findTrackList(playlistName).get();
+        if (tracks.stream().noneMatch(r -> r.getProviderId().equals(deleteTrackReq.getProviderId()))) {
+            throw new NotFoundException("Track with providerId" + deleteTrackReq.getProviderId() + "not found in playlist: " + playlistName);
         }
-
-        throw new NotFoundException("Track with providerId" + deleteTrackReq.getProviderId() + "not found in playlist: " + playlistName);
+        registry.deleteTrack(playlistName, deleteTrackReq.getProviderId());
+        switch (deleteTrackReq.getList()) {
+            case QUEUE:
+                notifier.notifyQueueUpdated(playlistName, registry.findTrackList(playlistName).get());
+            case SUGGESTIONS:
+                notifier.notifySuggestionsUpdated(playlistName, registry.findTrackList(playlistName).get());
+        }
     }
 
     public void addSuggestedTrack(AddExistingTrackReq addExistingTrackReq) {
         String playlistName = getPlaylistFromSession().getName();
         TrackSummary track = addExistingTrackReq.getTrack();
 
-        suggestionRegistry.deleteTrack(playlistName, track.getProviderId());
+        trackRegistry.deleteTrack(playlistName, track.getProviderId());
         queueRegistry.addTrack(playlistName, track);
         queueRegistry.reorderQueue(playlistName, addExistingTrackReq.getOrder());
 
-        List<TrackSummary> updatedQueue = queueRegistry.findQueue(playlistName).get();
-        List<TrackSummary> updatedSuggestions = suggestionRegistry.findSuggestions(playlistName).get();
+        List<TrackSummary> updatedQueue = queueRegistry.findTrackList(playlistName).get();
+        List<TrackSummary> updatedSuggestions = trackRegistry.findTrackList(playlistName).get();
         notifier.notifyQueueUpdated(playlistName, updatedQueue);
         notifier.notifySuggestionsUpdated(playlistName, updatedSuggestions);
     }
@@ -71,7 +75,7 @@ public class PlaylistService {
         queueRegistry.addTrack(playlistName, track);
         queueRegistry.reorderQueue(playlistName, addExistingTrackReq.getOrder());
 
-        List<TrackSummary> updatedQueue = queueRegistry.findQueue(playlistName).get();
+        List<TrackSummary> updatedQueue = queueRegistry.findTrackList(playlistName).get();
         notifier.notifyQueueUpdated(playlistName, updatedQueue);
     }
 
@@ -80,7 +84,7 @@ public class PlaylistService {
 
         queueRegistry.reorderQueue(playlistName, ids);
 
-        List<TrackSummary> updatedQueue = queueRegistry.findQueue(playlistName).get();
+        List<TrackSummary> updatedQueue = queueRegistry.findTrackList(playlistName).get();
         notifier.notifyQueueUpdated(playlistName, updatedQueue);
     }
 
@@ -95,5 +99,13 @@ public class PlaylistService {
         }
 
         throw new UnauthorizedException("No authenticated user found in session");
+    }
+
+    private TrackRegistry resolveRegistry(TrackList list) {
+        return switch (list) {
+            case SUGGESTIONS ->  trackRegistry;
+            case QUEUE ->  queueRegistry;
+            default -> throw new IllegalArgumentException("Unknown track list type: " + list);
+        };
     }
 }

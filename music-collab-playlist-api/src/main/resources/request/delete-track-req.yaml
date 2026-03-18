@@ -2,5 +2,5 @@ type: object
 properties:
   providerId:
     type: string
-  provider:
-    $ref: './../enum/provider.yaml'
+  list:
+    $ref: './../enum/track-list.yaml'

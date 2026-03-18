@@ -10,7 +10,7 @@
          class="drop-list target-column"
     >
       @for(item of queue; track item.providerId) {
-        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, queue)"/>
+        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Queue)"/>
       }
     </div>
   </div>
@@ -24,7 +24,7 @@
          class="drop-list"
     >
       @for(item of recommendations; track item.providerId) {
-        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, recommendations)"/>
+        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Recommendations)"/>
       }
     </div>
   </div>
@@ -38,7 +38,7 @@
          class="drop-list"
     >
       @for(item of suggestions; track item.providerId) {
-        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, suggestions)"/>
+        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Suggestions)"/>
       }
     </div>
   </div>

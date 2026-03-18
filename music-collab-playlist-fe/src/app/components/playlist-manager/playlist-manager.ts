@@ -2,12 +2,12 @@ import {Component, inject, OnInit} from '@angular/core';
 import {
   DashboardService,
   DashboardSettings,
-  HandlePlaylistService, Provider,
+  HandlePlaylistService, Provider, TrackList,
   TrackSummary
 } from '../../../openapi';
 import {WebSocketService} from '../../services/websocket.service';
 import {combineLatest} from 'rxjs';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {TrackContainer} from './track-container/track-container';
 
 @Component({
@@ -59,67 +59,67 @@ export class PlaylistManager implements OnInit {
         }
       )
     })
-    this.suggestions = [
-      {
-        provider: Provider.Spotify,
-        providerId: "1",
-        title: "Nem Origó",
-        artist: "Ákos",
-        album: "Origo??",
-        durationMs: 4556,
-        thumbnail: "https://i.ytimg.com/vi/nSOMOXcviZc/default.jpg"
-      },
-      {
-        provider: Provider.Spotify,
-        providerId: "1",
-        title: "Origó",
-        artist: "Pápai Jóci",
-        album: "Origo??",
-        durationMs: 4556,
-        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-      },
-      {
-        provider: Provider.Spotify,
-        providerId: "1",
-        title: "introvertált dal",
-        artist: "Azi deshi",
-        album: "Origo??",
-        durationMs: 4556,
-      },
-      {
-        provider: Provider.Spotify,
-        providerId: "6",
-        title: "MAJKAAKAKKA",
-        artist: "Mit csinálok az életemmel",
-        album: "Origo??",
-        durationMs: 4556,
-        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-      },
-    ];
-
-    this.queue = [
-      {
-        provider: Provider.Spotify,
-        providerId: "6",
-        title: "MAJKAAKAKKA",
-        artist: "Mit csinálok az életemmel",
-        album: "Origo??",
-        durationMs: 4556,
-        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-      }
-    ]
-
-    this.recommendations = [
-      {
-        provider: Provider.Spotify,
-        providerId: "1",
-        title: "Origó",
-        artist: "Pápai Jóci",
-        album: "Origo??",
-        durationMs: 4556,
-        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-      }
-    ]
+    // this.suggestions = [
+    //   {
+    //     provider: Provider.Spotify,
+    //     providerId: "1",
+    //     title: "Nem Origó",
+    //     artist: "Ákos",
+    //     album: "Origo??",
+    //     durationMs: 4556,
+    //     thumbnail: "https://i.ytimg.com/vi/nSOMOXcviZc/default.jpg"
+    //   },
+    //   {
+    //     provider: Provider.Spotify,
+    //     providerId: "1",
+    //     title: "Origó",
+    //     artist: "Pápai Jóci",
+    //     album: "Origo??",
+    //     durationMs: 4556,
+    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+    //   },
+    //   {
+    //     provider: Provider.Spotify,
+    //     providerId: "1",
+    //     title: "introvertált dal",
+    //     artist: "Azi deshi",
+    //     album: "Origo??",
+    //     durationMs: 4556,
+    //   },
+    //   {
+    //     provider: Provider.Spotify,
+    //     providerId: "6",
+    //     title: "MAJKAAKAKKA",
+    //     artist: "Mit csinálok az életemmel",
+    //     album: "Origo??",
+    //     durationMs: 4556,
+    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+    //   },
+    // ];
+    //
+    // this.queue = [
+    //   {
+    //     provider: Provider.Spotify,
+    //     providerId: "6",
+    //     title: "MAJKAAKAKKA",
+    //     artist: "Mit csinálok az életemmel",
+    //     album: "Origo??",
+    //     durationMs: 4556,
+    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+    //   }
+    // ]
+    //
+    // this.recommendations = [
+    //   {
+    //     provider: Provider.Spotify,
+    //     providerId: "1",
+    //     title: "Origó",
+    //     artist: "Pápai Jóci",
+    //     album: "Origo??",
+    //     durationMs: 4556,
+    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+    //   }
+    // ]
   }
 
   public onQueueDrop(event: CdkDragDrop<TrackSummary[]>) {
@@ -165,7 +165,12 @@ export class PlaylistManager implements OnInit {
     }
   }
 
-  public deleteTrackFromList(track: TrackSummary, list: TrackSummary[]): void {
-    list.splice(list.indexOf(track), 1);
+  public deleteTrackFromList(track: TrackSummary, trackList: TrackList): void {
+    this._playlistHandlerService.deleteTrack({
+      providerId: track.providerId,
+      list: trackList
+    }).subscribe();
   }
+
+  protected readonly TrackList = TrackList;
 }
