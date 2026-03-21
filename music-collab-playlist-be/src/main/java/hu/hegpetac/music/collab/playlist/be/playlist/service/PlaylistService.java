@@ -54,29 +54,21 @@ public class PlaylistService {
         }
     }
 
-    public void addSuggestedTrack(AddExistingTrackReq addExistingTrackReq) {
+    public void addTrackFromList(AddExistingTrackReq addExistingTrackReq) {
         String playlistName = getPlaylistFromSession().getName();
-        TrackSummary track = addExistingTrackReq.getTrack();
-
-        trackRegistry.deleteTrack(playlistName, track.getProviderId());
-        queueRegistry.addTrack(playlistName, track);
-        queueRegistry.reorderQueue(playlistName, addExistingTrackReq.getOrder());
-
-        List<TrackSummary> updatedQueue = queueRegistry.findTrackList(playlistName).get();
-        List<TrackSummary> updatedSuggestions = trackRegistry.findTrackList(playlistName).get();
-        notifier.notifyQueueUpdated(playlistName, updatedQueue);
-        notifier.notifySuggestionsUpdated(playlistName, updatedSuggestions);
-    }
-
-    public void addRecommendedTrack(AddExistingTrackReq addExistingTrackReq) {
-        String playlistName = getPlaylistFromSession().getName();
+        queueRegistry.registerPlaylist(playlistName);
         TrackSummary track = addExistingTrackReq.getTrack();
 
         queueRegistry.addTrack(playlistName, track);
         queueRegistry.reorderQueue(playlistName, addExistingTrackReq.getOrder());
-
         List<TrackSummary> updatedQueue = queueRegistry.findTrackList(playlistName).get();
         notifier.notifyQueueUpdated(playlistName, updatedQueue);
+
+        if(addExistingTrackReq.getList().equals(TrackList.SUGGESTIONS)) {
+            trackRegistry.deleteTrack(playlistName, track.getProviderId());
+            List<TrackSummary> updatedSuggestions = trackRegistry.findTrackList(playlistName).get();
+            notifier.notifySuggestionsUpdated(playlistName, updatedSuggestions);
+        }
     }
 
     public void reorderQueue(List<ProviderIdListInner> ids) {

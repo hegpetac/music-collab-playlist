@@ -31,14 +31,8 @@ public class PlaylistController implements HandlePlaylistApi {
     }
 
     @Override
-    public ResponseEntity<Void> addRecommendedTrack(AddExistingTrackReq addExistingTrackReq) {
-        playlistService.addRecommendedTrack(addExistingTrackReq);
-        return ResponseEntity.ok().build();
-    }
-
-    @Override
-    public ResponseEntity<Void> addSuggestedTrack(AddExistingTrackReq addExistingTrackReq) {
-        playlistService.addSuggestedTrack(addExistingTrackReq);
+    public ResponseEntity<Void> addTrackFromList(AddExistingTrackReq addExistingTrackReq) {
+        playlistService.addTrackFromList(addExistingTrackReq);
         return ResponseEntity.ok().build();
     }
 

@@ -59,67 +59,67 @@ export class PlaylistManager implements OnInit {
         }
       )
     })
-    // this.suggestions = [
-    //   {
-    //     provider: Provider.Spotify,
-    //     providerId: "1",
-    //     title: "Nem Origó",
-    //     artist: "Ákos",
-    //     album: "Origo??",
-    //     durationMs: 4556,
-    //     thumbnail: "https://i.ytimg.com/vi/nSOMOXcviZc/default.jpg"
-    //   },
-    //   {
-    //     provider: Provider.Spotify,
-    //     providerId: "1",
-    //     title: "Origó",
-    //     artist: "Pápai Jóci",
-    //     album: "Origo??",
-    //     durationMs: 4556,
-    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-    //   },
-    //   {
-    //     provider: Provider.Spotify,
-    //     providerId: "1",
-    //     title: "introvertált dal",
-    //     artist: "Azi deshi",
-    //     album: "Origo??",
-    //     durationMs: 4556,
-    //   },
-    //   {
-    //     provider: Provider.Spotify,
-    //     providerId: "6",
-    //     title: "MAJKAAKAKKA",
-    //     artist: "Mit csinálok az életemmel",
-    //     album: "Origo??",
-    //     durationMs: 4556,
-    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-    //   },
-    // ];
-    //
-    // this.queue = [
-    //   {
-    //     provider: Provider.Spotify,
-    //     providerId: "6",
-    //     title: "MAJKAAKAKKA",
-    //     artist: "Mit csinálok az életemmel",
-    //     album: "Origo??",
-    //     durationMs: 4556,
-    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-    //   }
-    // ]
-    //
-    // this.recommendations = [
-    //   {
-    //     provider: Provider.Spotify,
-    //     providerId: "1",
-    //     title: "Origó",
-    //     artist: "Pápai Jóci",
-    //     album: "Origo??",
-    //     durationMs: 4556,
-    //     thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
-    //   }
-    // ]
+    this.suggestions = [
+      {
+        provider: Provider.Spotify,
+        providerId: "1",
+        title: "Nem Origó",
+        artist: "Ákos",
+        album: "Origo??",
+        durationMs: 4556,
+        thumbnail: "https://i.ytimg.com/vi/nSOMOXcviZc/default.jpg"
+      },
+      {
+        provider: Provider.Spotify,
+        providerId: "1",
+        title: "Origó",
+        artist: "Pápai Jóci",
+        album: "Origo??",
+        durationMs: 4556,
+        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+      },
+      {
+        provider: Provider.Spotify,
+        providerId: "1",
+        title: "introvertált dal",
+        artist: "Azi deshi",
+        album: "Origo??",
+        durationMs: 4556,
+      },
+      {
+        provider: Provider.Spotify,
+        providerId: "6",
+        title: "MAJKAAKAKKA",
+        artist: "Mit csinálok az életemmel",
+        album: "Origo??",
+        durationMs: 4556,
+        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+      },
+    ];
+
+    this.queue = [
+      {
+        provider: Provider.Spotify,
+        providerId: "6",
+        title: "MAJKAAKAKKA",
+        artist: "Mit csinálok az életemmel",
+        album: "Origo??",
+        durationMs: 4556,
+        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+      }
+    ]
+
+    this.recommendations = [
+      {
+        provider: Provider.Spotify,
+        providerId: "1",
+        title: "Origó",
+        artist: "Pápai Jóci",
+        album: "Origo??",
+        durationMs: 4556,
+        thumbnail: "https://i.scdn.co/image/ab67616d0000b2733d471b0bc3892254f52163fd"
+      }
+    ]
   }
 
   public onQueueDrop(event: CdkDragDrop<TrackSummary[]>) {
@@ -137,15 +137,16 @@ export class PlaylistManager implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
-      this._playlistHandlerService.addRecommendedTrack({
+      this._playlistHandlerService.addTrackFromList({
         track: this.queue.at(event.currentIndex),
         order: this.queue.map(track => {
           return {
             providerId: track.providerId,
             provider: track.provider
           }
-        })
-      })
+        }),
+        list: TrackList.Recommendations
+      }).subscribe()
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -153,15 +154,16 @@ export class PlaylistManager implements OnInit {
         event.previousIndex,
         event.currentIndex
       )
-      this._playlistHandlerService.addSuggestedTrack({
+      this._playlistHandlerService.addTrackFromList({
         track: this.queue.at(event.currentIndex),
         order: this.queue.map(track => {
           return {
             providerId: track.providerId,
             provider: track.provider
           }
-        })
-      })
+        }),
+        list: TrackList.Suggestions
+      }).subscribe()
     }
   }
 

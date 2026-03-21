@@ -392,46 +392,12 @@ paths:
               schema:
                 $ref: './error/not-found.yaml'
 
-  /handle-playlist/add-suggested-track:
+  /handle-playlist/add-track-from-list:
     post:
       tags:
         - Handle Playlist
-      operationId: addSuggestedTrack
-      summary: Add track suggested by the users to the queue
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './request/add-existing-track-req.yaml'
-      responses:
-        '200':
-          description: 'Success'
-        '400':
-          description: 'Bad Request'
-          content:
-            application/json:
-              schema:
-                $ref: './error/bad-request.yaml'
-        '403':
-          description: 'Unauthorized'
-          content:
-            application/json:
-              schema:
-                $ref: './error/unauthorized.yaml'
-        '404':
-          description: 'Not Found'
-          content:
-            application/json:
-              schema:
-                $ref: './error/not-found.yaml'
-
-  /handle-playlist/add-recommended-track:
-    post:
-      tags:
-        - Handle Playlist
-      operationId: addRecommendedTrack
-      summary: Add track recommended by the Spotify API to the queue
+      operationId: addTrackFromList
+      summary: Add track suggested or recommended track to the queue
       requestBody:
         required: true
         content:

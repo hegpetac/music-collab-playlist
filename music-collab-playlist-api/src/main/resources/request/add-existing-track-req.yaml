@@ -4,4 +4,6 @@ properties:
     $ref: './../model/track-summary.yaml'
   order:
     $ref: './../model/provider-id-list.yaml'
+  list:
+    $ref: './../enum/track-list.yaml'
 

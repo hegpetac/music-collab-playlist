@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class TrackRegistry {
-    private final ConcurrentHashMap<String, List<TrackSummary>> playlists = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<String, List<TrackSummary>> playlists = new ConcurrentHashMap<>();
 
     public void registerPlaylist(String playlistName) {
         playlists.putIfAbsent(playlistName, Collections.synchronizedList(new ArrayList<>()));

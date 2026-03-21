@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class QueueRegistry extends TrackRegistry {
-    private final ConcurrentHashMap<String, List<TrackSummary>> playlists = new ConcurrentHashMap<>();
 
     public void reorderQueue(String playlistName ,List<ProviderIdListInner> providerInfo) {
         List<TrackSummary> tracks = playlists.get(playlistName);
