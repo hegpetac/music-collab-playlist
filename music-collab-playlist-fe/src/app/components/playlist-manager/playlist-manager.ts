@@ -9,12 +9,14 @@ import {WebSocketService} from '../../services/websocket.service';
 import {combineLatest} from 'rxjs';
 import {CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {TrackContainer} from './track-container/track-container';
+import {Search} from './search/search';
 
 @Component({
   selector: 'app-playlist-manager',
   imports: [
     CdkDropList,
-    TrackContainer
+    TrackContainer,
+    Search
   ],
   templateUrl: './playlist-manager.html',
   styleUrl: './playlist-manager.css',
