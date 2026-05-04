@@ -42,3 +42,55 @@
     </div>
   </div>
 </div>
+<div class="playback-manager">
+  <div class="active-track">
+    @if(state && state.activeTrack) {
+      <img class="thumb" [src]="state.activeTrack.thumbnail" alt="Not found"/>
+      <div class="track-details">
+        <div class="title">{{state.activeTrack.title}}</div>
+        <div class="subtitle">
+          {{state.activeTrack.artist}}
+        </div>
+      </div>
+    }
+  </div>
+  <div class="playback-controls">
+    <div class="buttons-row">
+      <button
+        class="control-button"
+        mat-icon-button
+        (click)="togglePlayPause()"
+      >
+        <mat-icon>{{state?.status === PlaybackStatus.Playing ? 'pause' : 'play_arrow'}}</mat-icon>
+      </button>
+      <button
+        class="control-button"
+        mat-icon-button
+        (click)="skip()"
+      >
+        <mat-icon>skip_next</mat-icon>
+      </button>
+    </div>
+    <div class="progress-row">
+      <span class="time-display">{{(isSeeking ? seekPreviewsMs : currentPosMs()) | msToTime}}</span>
+      <mat-slider
+        class="progress-slider"
+        min="0"
+        max="100"
+        step="0.1"
+        [disabled]="!state"
+      >
+        <input
+          matSliderThumb
+          [value]="progressPercent()"
+          (mousedown)="onSeekStart($event)"
+          (touchstart)="onSeekStart($event)"
+          (input)="onSeekMove($event)"
+          (change)="onSeekEnd($event)"
+        />
+      </mat-slider>
+      <span class="time-display">{{ totalDurationMs() | msToTime}}</span>
+    </div>
+  </div>
+</div>
+

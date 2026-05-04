@@ -1,0 +1,9 @@
+type: object
+properties:
+  activeTrack:
+    $ref: './track-summary.yaml'
+  status:
+    $ref: '../enum/playback-status.yaml'
+  positionMS:
+    type: number
+    

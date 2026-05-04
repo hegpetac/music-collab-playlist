@@ -8,13 +8,6 @@ servers:
   - url: 'http://127.0.0.1:8080'
     description: Local Spring Boot Server
 
-components:
-  securitySchemes:
-    JSESSIONIDAuth:
-      type: apiKey
-      in: cookie
-      name: JSESSIONID
-
 security:
   - JSESSIONIDAuth: []
 
@@ -465,7 +458,7 @@ paths:
       tags:
         - Handle Playlist
       operationId: deleteTrack
-      summary: Delete a tracks from the suggestions
+      summary: Delete a track from dashboard
       requestBody:
         required: true
         content:
@@ -493,5 +486,132 @@ paths:
             application/json:
               schema:
                 $ref: './error/not-found.yaml'
+  /handle-playback/pause:
+    post:
+      tags:
+        - Handle Playback
+      operationId: pause
+      summary: Pause playback
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+  /handle-playback/continue:
+    post:
+      tags:
+        - Handle Playback
+      operationId: resume
+      summary: Resume playback
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+  /handle-playback/skip:
+    post:
+      tags:
+        - Handle Playback
+      operationId: skip
+      summary: Skip currently playing song
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+  /handle-playback/seek:
+    post:
+      tags:
+        - Handle Playback
+      operationId: Seek
+      summary: Seek in currently playing track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/seek-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+components:
+  securitySchemes:
+    JSESSIONIDAuth:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID
+
+  schemas:
+    PlaybackStateMessage:
+      $ref: './model/playback-state.yaml'
+
+
 
 

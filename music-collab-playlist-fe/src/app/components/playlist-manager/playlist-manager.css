@@ -6,7 +6,7 @@
   padding: 18px;
   border-radius: 18px;
   color: #fbfbfb;
-  height: 80vh;
+  height: 70vh;
 }
 
 .drop-list-column-container {
@@ -21,7 +21,7 @@
 .drop-list {
   display: flex;
   flex-direction: column;
-  height: 75vh;
+  height: 60vh;
   margin: 2.5vh;
   gap: 0.5vh;
 }
@@ -39,6 +39,76 @@
 .target-column.cdk-drop-list-dragging {
   background-color: rgba(0, 82, 204, 0.05);
   border: 2px dashed #0052cc;
+}
+
+.playback-manager {
+  width: 66vw;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.active-track {
+  color: #fbfbfb;;
+  display: flex;
+
+}
+
+.title {
+  margin-right: 12px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.subtitle {
+  font-size: 14px;
+
+}
+
+.control-button {
+  color: #fbfbfb;
+}
+
+.thumb {
+  width: 8vh;
+  height: 8vh;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5vh 0;
+  width: 18vw;
+}
+
+.playback-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons-row {
+  color: #fbfbfb;
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-row {
+  width: 50vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-slider {
+  width: 40vw;
+}
+
+.time-display {
+  color: #fbfbfb;
 }
 
 
