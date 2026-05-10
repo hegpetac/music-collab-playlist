@@ -571,7 +571,7 @@ paths:
     post:
       tags:
         - Handle Playback
-      operationId: Seek
+      operationId: seek
       summary: Seek in currently playing track
       requestBody:
         required: true

@@ -1,7 +1,7 @@
 import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {
   DashboardService,
-  DashboardSettings,
+  DashboardSettings, HandlePlaybackService,
   HandlePlaylistService, PlaybackState, PlaybackStateMessage, PlaybackStatus, Provider, TrackList,
   TrackSummary, YoutubePlaybackMode
 } from '../../../openapi';
@@ -48,6 +48,7 @@ export class PlaylistManager implements OnInit, OnDestroy {
   private _ws: WebSocketService = inject(WebSocketService);
   private _dashboardService: DashboardService = inject(DashboardService);
   private _playlistHandlerService = inject(HandlePlaylistService);
+  private _playbackHandlerService = inject(HandlePlaybackService);
   private intervalId: number | undefined;
 
   public ngOnInit() {
@@ -126,7 +127,7 @@ export class PlaylistManager implements OnInit, OnDestroy {
   }
 
   private handlePausePlayback() {
-
+    //TODO
   }
 
   private handleEmptyQueue() {
@@ -186,11 +187,15 @@ export class PlaylistManager implements OnInit, OnDestroy {
   }
 
   public togglePlayPause(): void{
-
+    if (this.state?.status === PlaybackStatus.Playing) {
+      this._playbackHandlerService.pause().subscribe();
+    } else {
+      this._playbackHandlerService.resume().subscribe();
+    }
   }
 
   public skip(): void {
-
+    this._playbackHandlerService.skip().subscribe();
   }
 
   private updateProgressPercent(state: PlaybackState): void {
@@ -231,7 +236,9 @@ export class PlaylistManager implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     this.currentPosMs.set(this.percentToMs(+input.value));
     this.isSeeking = false;
-    //TODO service call
+    this._playbackHandlerService.seek({
+      positionMs: this.currentPosMs()
+    }).subscribe();
   }
 
   private percentToMs(percent: number): number {
