@@ -1,6 +1,7 @@
 package hu.hegpetac.music.collab.playlist.be.playlist.service;
 
 import lombok.RequiredArgsConstructor;
+import org.openapitools.model.PlaybackState;
 import org.openapitools.model.TrackSummary;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,7 @@ public class ModelUpdateNotifier {
         messagingTemplate.convertAndSend("/topic/queue/" + playlistName, queue);
     }
 
-    public void notifyTrackStarted(String playlistName, TrackSummary track) {
-        messagingTemplate.convertAndSend("/topic/track/" + playlistName, track);
+    public void notifyPlaybackEvent(String playlistName, PlaybackState state) {
+        messagingTemplate.convertAndSend("/topic/playback/" + playlistName, state);
     }
-
-//    TODO
-//    public void notifyPlaybackEvent(String playlistName, ) {}
 }

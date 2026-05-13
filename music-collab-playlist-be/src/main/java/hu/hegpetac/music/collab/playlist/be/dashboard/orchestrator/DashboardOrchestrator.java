@@ -3,6 +3,7 @@ package hu.hegpetac.music.collab.playlist.be.dashboard.orchestrator;
 import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
 import hu.hegpetac.music.collab.playlist.be.dashboard.model.ModifyNameDetails;
 import hu.hegpetac.music.collab.playlist.be.dashboard.service.DashboardService;
+import hu.hegpetac.music.collab.playlist.be.playlist.registry.PlaybackSessionRegistry;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.QueueRegistry;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.TrackRegistry;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class DashboardOrchestrator {
     private final DashboardService dashboardService;
     private final TrackRegistry trackRegistry;
     private final QueueRegistry queueRegistry;
+    private final PlaybackSessionRegistry playbackStateRegistry;
 
     public User getPlaylistOwner(String playlistName, int deviceCode) {
         return dashboardService.getPlaylistOwner(playlistName, deviceCode);
@@ -29,6 +31,7 @@ public class DashboardOrchestrator {
         ModifyNameDetails details = dashboardService.modifyName(modifyNameReq);
         trackRegistry.renamePlaylist(details.oldName(), details.resp().getName());
         queueRegistry.renamePlaylist(details.oldName(), details.resp().getName());
+        playbackStateRegistry.renamePlaylist(details.oldName(), details.resp().getName());
         return details.resp();
     }
 }
