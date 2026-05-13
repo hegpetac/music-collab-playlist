@@ -1,0 +1,1 @@
+export const DEFAULT_TOTAL_DURATION = 99 * 60 * 1000 + 59 * 1000;

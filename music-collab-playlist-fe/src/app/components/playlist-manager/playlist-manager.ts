@@ -2,7 +2,7 @@ import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/c
 import {
   DashboardService,
   DashboardSettings, HandlePlaybackService,
-  HandlePlaylistService, PlaybackState, PlaybackStateMessage, PlaybackStatus, Provider, TrackList,
+  HandlePlaylistService, PlaybackState, PlaybackStatus, Provider, TrackList,
   TrackSummary, YoutubePlaybackMode
 } from '../../../openapi';
 import {WebSocketService} from '../../services/websocket.service';
@@ -14,6 +14,7 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MsToTimePipe} from '../../pipes/ms-to-time-pipe';
+import {DEFAULT_TOTAL_DURATION} from '../../constants/defaults';
 
 @Component({
   selector: 'app-playlist-manager',
@@ -39,7 +40,7 @@ export class PlaylistManager implements OnInit, OnDestroy {
   public isSeeking: boolean = false;
   public seekPreviewsMs: number = 0;
   public currentPosMs = signal(0);
-  public totalDurationMs = signal(0);
+  public totalDurationMs = signal(DEFAULT_TOTAL_DURATION);
   public progressPercent = computed(() => {
     const total = this.totalDurationMs();
     return total !== 0 ? Math.min((this.currentPosMs() / total) * 100, 100) : 0;
@@ -76,32 +77,37 @@ export class PlaylistManager implements OnInit, OnDestroy {
           this.recommendations = data;
         }
       )
-      this._ws.subscribe<PlaybackStateMessage>(
+      this._ws.subscribe<PlaybackState>(
         `/topic/playback/${this.settings?.name}`,
-        (data: PlaybackStateMessage) => {
+        (data: PlaybackState) => {
+          console.log(data)
           this.state = data;
           this.handlePlaybackStateMessage();
         }
       )
     });
-    this.state = {
-      activeTrack: {
-        provider: Provider.Spotify,
-        providerId: "1",
-        title: "Nem Origó",
-        artist: "Ákos",
-        album: "Origo??",
-        durationMs: 306445,
-        thumbnail: "https://i.ytimg.com/vi/nSOMOXcviZc/default.jpg"
-      },
-      status: PlaybackStatus.Playing,
-      positionMS: 111449
-    }
+    // this.state = {
+    //   activeTrack: {
+    //     provider: Provider.Spotify,
+    //     providerId: "1",
+    //     title: "Nem Origó",
+    //     artist: "Ákos",
+    //     album: "Origo??",
+    //     durationMs: 306445,
+    //     thumbnail: "https://i.ytimg.com/vi/nSOMOXcviZc/default.jpg"
+    //   },
+    //   status: PlaybackStatus.Playing,
+    //   positionMS: 111449
+    // }
 
-    this.updateProgressPercent(this.state);
+    // this.updateProgressPercent(this.state);
   }
 
   private handlePlaybackStateMessage() {
+    this.currentPosMs.set(this.state?.positionMS || 0);
+    this.state?.activeTrack ?
+      this.totalDurationMs.set(this.state.activeTrack.durationMs) :
+      this.totalDurationMs.set(DEFAULT_TOTAL_DURATION);
     switch (this.state!.status) {
       case PlaybackStatus.Playing:
         this.handleStartTrack();
@@ -124,14 +130,15 @@ export class PlaylistManager implements OnInit, OnDestroy {
         window.open(`https://www.youtube.com/watch?v=${this.state.activeTrack.providerId}`, '_blank');
       }
     }
+    this.startProgress();
   }
 
   private handlePausePlayback() {
-    //TODO
+    this.stopProgress();
   }
 
   private handleEmptyQueue() {
-    //TODO
+    this.stopProgress();
   }
 
   public onQueueDrop(event: CdkDragDrop<TrackSummary[]>) {
