@@ -32,6 +32,7 @@ public class PlaybackService {
     private final QueueRegistry queueRegistry;
     private final PlaybackSessionRegistry playbackSessionRegistry;
     private final TaskScheduler scheduler;
+    private final SpotifyPlaybackService spotifyPlaybackService;
 
     public void pause() {
         System.out.println("pausing");
@@ -158,12 +159,13 @@ public class PlaybackService {
     }
 
     private void handleSessionStateChange(String playlistName, PlaybackState state) {
-        notifier.notifyPlaybackEvent(playlistName, state);
-
         System.out.println("Playback state changed: " + playlistName + ", " + state.getStatus().name());
-        if (state.getActiveTrack().getProvider() == Provider.SPOTIFY) {
-            //TODO API call
+        spotifyPlaybackService.pausePlayback();
+
+        if (state.getStatus() == PlaybackStatus.PLAYING && state.getActiveTrack().getProvider() == Provider.SPOTIFY) {
+            spotifyPlaybackService.resumePlayback(state.getActiveTrack().getProviderId(), state.getPositionMS().longValue());
         }
+        notifier.notifyPlaybackEvent(playlistName, state);
     }
 
     private ScheduledFuture<?> scheduleTrackFinish(String playlistName, PlaybackSession session) {
