@@ -2,6 +2,8 @@ package hu.hegpetac.music.collab.playlist.be.dashboard.entity;
 
 import hu.hegpetac.music.collab.playlist.be.authentication.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,10 @@ public class DashboardSettings {
 
     @Column(unique = true)
     private String name;
+
+    @Column
+    @Min(0) @Max(24 * 60)
+    private int replayTimeLimit = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "youtube_playback_mode")

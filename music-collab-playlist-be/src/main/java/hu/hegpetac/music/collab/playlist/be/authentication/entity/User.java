@@ -1,7 +1,7 @@
 package hu.hegpetac.music.collab.playlist.be.authentication.entity;
 
 import hu.hegpetac.music.collab.playlist.be.dashboard.entity.DashboardSettings;
-import hu.hegpetac.music.collab.playlist.be.playlist.entity.Playlist;
+import hu.hegpetac.music.collab.playlist.be.playlist.entity.PlaybackStats;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class User {
     private String spotifyPrincipalId;
 
     @OneToOne(mappedBy = "owner")
-    private Playlist playlist;
+    private PlaybackStats playbackStats;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dashboard_settings_id", referencedColumnName = "id")
@@ -37,6 +37,7 @@ public class User {
 
     public User() {
         this.dashboardSettings = new DashboardSettings();
+        this.playbackStats = new PlaybackStats();
     }
 
     @Override

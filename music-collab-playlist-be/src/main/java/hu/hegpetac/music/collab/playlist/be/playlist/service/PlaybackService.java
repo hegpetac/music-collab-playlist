@@ -5,9 +5,14 @@ import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2Use
 import hu.hegpetac.music.collab.playlist.be.dashboard.entity.DashboardSettings;
 import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
 import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
+import hu.hegpetac.music.collab.playlist.be.playlist.entity.PlaybackStats;
+import hu.hegpetac.music.collab.playlist.be.playlist.entity.TrackStats;
+import hu.hegpetac.music.collab.playlist.be.playlist.mapper.TrackMapper;
 import hu.hegpetac.music.collab.playlist.be.playlist.model.PlaybackSession;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.PlaybackSessionRegistry;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.QueueRegistry;
+import hu.hegpetac.music.collab.playlist.be.playlist.repository.PlaybackStatsRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.PlaybackState;
 import org.openapitools.model.PlaybackStatus;
@@ -33,6 +38,8 @@ public class PlaybackService {
     private final PlaybackSessionRegistry playbackSessionRegistry;
     private final TaskScheduler scheduler;
     private final SpotifyPlaybackService spotifyPlaybackService;
+    private final PlaybackStatsRepository playbackStatsRepository;
+    private final TrackMapper trackMapper;
 
     public void pause() {
         System.out.println("pausing");
@@ -115,6 +122,8 @@ public class PlaybackService {
             session.setPlayedDuration(Duration.ZERO);
             ScheduledFuture<?> future = scheduleTrackFinish(playlistName, session);
             session.setFinishFuture(future);
+            updatePlaybackStats(playbackState.getActiveTrack());
+
             playbackSessionRegistry.updatePlaybackSession(playlistName, session);
 
             handleSessionStateChange(playlistName, playbackState);
@@ -157,6 +166,23 @@ public class PlaybackService {
 
         handleSessionStateChange(playlistName, state);
     }
+
+    @Transactional
+    protected void updatePlaybackStats(TrackSummary trackSummary) {
+        System.out.println("Updating playback stats for " + trackSummary.getTitle());
+        PlaybackStats stats = getPlaylistFromSession().getUser().getPlaybackStats();
+
+        stats.getTrackStats().stream()
+                .filter(track -> track.getProviderId().equals(trackSummary.getProviderId()))
+                .findFirst()
+                .ifPresentOrElse(
+                        TrackStats::incrementTimesPlayed,
+                        () -> stats.addNewTrackStats(trackMapper.toNewTrackStats(trackSummary))
+                );
+
+        playbackStatsRepository.save(stats);
+    }
+
 
     private void handleSessionStateChange(String playlistName, PlaybackState state) {
         System.out.println("Playback state changed: " + playlistName + ", " + state.getStatus().name());

@@ -104,6 +104,23 @@ public class DashboardService {
         return dashboardSettingsRepository.findByNameAndDeviceCode(playlistName, deviceCode).isPresent();
     }
 
+    public DashboardSettings getPlaylistByName(String playlistName) throws NotFoundException {
+        Optional<DashboardSettings> existingDashboardSettings =  dashboardSettingsRepository.findByName(playlistName);
+        if (existingDashboardSettings.isEmpty()) {
+            throw new NotFoundException("No settings found for playlist " + playlistName);
+        }
+
+        return existingDashboardSettings.get();
+    }
+
+    public void modifyTimeLimit(int newLimit) {
+        DashboardSettings dashboardSettings = getDashboardFromAuthenticatedUserFromSession();
+
+        dashboardSettings.setReplayTimeLimit(newLimit);
+
+        dashboardSettingsRepository.save(dashboardSettings);
+    }
+
     private DashboardSettings getDashboardFromAuthenticatedUserFromSession() throws UnauthorizedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
