@@ -12,7 +12,6 @@ import hu.hegpetac.music.collab.playlist.be.playlist.model.PlaybackSession;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.PlaybackSessionRegistry;
 import hu.hegpetac.music.collab.playlist.be.playlist.registry.QueueRegistry;
 import hu.hegpetac.music.collab.playlist.be.playlist.repository.PlaybackStatsRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.PlaybackState;
 import org.openapitools.model.PlaybackStatus;
@@ -23,6 +22,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -170,7 +170,15 @@ public class PlaybackService {
     @Transactional
     protected void updatePlaybackStats(TrackSummary trackSummary) {
         System.out.println("Updating playback stats for " + trackSummary.getTitle());
-        PlaybackStats stats = getPlaylistFromSession().getUser().getPlaybackStats();
+        var user = getPlaylistFromSession().getUser();
+
+        var statsOpt = playbackStatsRepository.findByOwner(user);
+
+        if (statsOpt.isEmpty()) {
+            throw new NotFoundException("Playlist not found: " + trackSummary.getTitle());
+        }
+
+        var stats = statsOpt.get();
 
         stats.getTrackStats().stream()
                 .filter(track -> track.getProviderId().equals(trackSummary.getProviderId()))

@@ -17,6 +17,8 @@ import {MatInput} from '@angular/material/input';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {Router} from '@angular/router';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-playlist-dashboard',
@@ -30,6 +32,8 @@ import {Router} from '@angular/router';
     MatInput,
     ReactiveFormsModule,
     MatError,
+    MatSlider,
+    MatSliderThumb,
   ],
   providers: [
     {
@@ -71,7 +75,8 @@ export class PlaylistDashboard implements OnInit {
     return this._formBuilder.group<IDashboardSettingsForm>({
       playlistName: this._formBuilder.nonNullable.control(s.name ?? "", [Validators.required]),
       suggestionPlaybackMode: this._formBuilder.nonNullable.control(s.suggestionPlaybackMode ?? SuggestionPlaybackMode.CollectSuggestions),
-      youtubePlaybackMode: this._formBuilder.nonNullable.control(s.youtubePlaybackMode ?? YoutubePlaybackMode.BuiltIn)
+      youtubePlaybackMode: this._formBuilder.nonNullable.control(s.youtubePlaybackMode ?? YoutubePlaybackMode.BuiltIn),
+      offsetTimeLimit: this._formBuilder.nonNullable.control(s.replayOffsetLimit ?? 0)
     })
   }
 
@@ -98,6 +103,14 @@ export class PlaylistDashboard implements OnInit {
         },
         error: (err) => console.error('Failed to update YouTube playback mode', err)
       });
+    })
+
+    this.dashboardForm.controls.offsetTimeLimit.valueChanges
+      .pipe(
+        debounceTime(400),
+      )
+      .subscribe(value => {
+      this._dashboardService.updateReplayOffset({offset: value}).subscribe()
     })
 
     this.dashboardForm.controls.playlistName.valueChanges.pipe(
@@ -155,4 +168,5 @@ export interface IDashboardSettingsForm {
   playlistName: FormControl<string>;
   suggestionPlaybackMode: FormControl<SuggestionPlaybackMode>;
   youtubePlaybackMode: FormControl<YoutubePlaybackMode>;
+  offsetTimeLimit: FormControl<number>;
 }

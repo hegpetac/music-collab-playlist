@@ -19,3 +19,7 @@ properties:
     type: string
     description: Base URL used to build the QR link
     format: uri
+  replayOffsetLimit:
+    type: integer
+    maximum: 1440
+    minimum: 0

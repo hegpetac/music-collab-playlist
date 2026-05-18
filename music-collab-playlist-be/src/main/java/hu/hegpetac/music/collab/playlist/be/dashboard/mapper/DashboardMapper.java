@@ -10,13 +10,14 @@ import org.mapstruct.Mapping;
 public interface DashboardMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
-    public DashboardSettings mapDashboardSettings(org.openapitools.model.DashboardSettings dashboardSettings);
+    DashboardSettings mapDashboardSettings(org.openapitools.model.DashboardSettings dashboardSettings);
     @Mapping(target = "qrBaseUrl", ignore = true)
-    public org.openapitools.model.DashboardSettings mapDashboardSettings(DashboardSettings dashboardSettings);
+    @Mapping(target = "replayOffsetLimit", source = "replayTimeLimit")
+    org.openapitools.model.DashboardSettings mapDashboardSettings(DashboardSettings dashboardSettings);
 
-    public YoutubePlaybackMode mapYoutubePlaybackMode(org.openapitools.model.YoutubePlaybackMode youtubePlaybackMode);
-    public org.openapitools.model.YoutubePlaybackMode mapYoutubePlaybackMode(YoutubePlaybackMode youtubePlaybackMode);
+    YoutubePlaybackMode mapYoutubePlaybackMode(org.openapitools.model.YoutubePlaybackMode youtubePlaybackMode);
+    org.openapitools.model.YoutubePlaybackMode mapYoutubePlaybackMode(YoutubePlaybackMode youtubePlaybackMode);
 
-    public SuggestionPlaybackMode mapSuggestionPlaybackMode(org.openapitools.model.SuggestionPlaybackMode suggestionPlaybackMode);
-    public org.openapitools.model.SuggestionPlaybackMode mapSuggestionPlaybackMode(SuggestionPlaybackMode suggestionPlaybackMode);
+    SuggestionPlaybackMode mapSuggestionPlaybackMode(org.openapitools.model.SuggestionPlaybackMode suggestionPlaybackMode);
+    org.openapitools.model.SuggestionPlaybackMode mapSuggestionPlaybackMode(SuggestionPlaybackMode suggestionPlaybackMode);
 }

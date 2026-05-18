@@ -23,7 +23,7 @@ public class PlaybackStats {
     @Transient
     private int totalSecondsPlayed;
 
-    @OneToMany(mappedBy = "playbackStats")
+    @OneToMany(mappedBy = "playbackStats", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrackStats> trackStats;
 
     public void addNewTrackStats(TrackStats t) {

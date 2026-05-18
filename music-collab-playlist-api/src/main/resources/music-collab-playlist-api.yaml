@@ -193,7 +193,39 @@ paths:
             application/json:
               schema:
                 $ref: './error/not-found.yaml'
-
+  /api/dashboard/update-replay-offset:
+    post:
+      tags:
+        - Dashboard
+      operationId: updateReplayOffset
+      summary: Change the offset required between the same tracks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/modify-replay-offset-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
   /join-playlist:
     post:
       tags:

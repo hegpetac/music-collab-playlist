@@ -3,6 +3,7 @@ package hu.hegpetac.music.collab.playlist.be.dashboard.controller;
 import hu.hegpetac.music.collab.playlist.be.dashboard.orchestrator.DashboardOrchestrator;
 import hu.hegpetac.music.collab.playlist.be.dashboard.service.DashboardService;
 import lombok.RequiredArgsConstructor;
+import org.openapitools.api.DashboardApi;
 import org.openapitools.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class DashboardController implements org.openapitools.api.DashboardApi {
+public class DashboardController implements DashboardApi {
     private final DashboardService dashboardService;
     private final DashboardOrchestrator dashboardOrchestrator;
 
@@ -37,5 +38,11 @@ public class DashboardController implements org.openapitools.api.DashboardApi {
     @Override
     public ResponseEntity<ModifyNameResp> setName(ModifyNameReq modifyNameReq) {
         return ResponseEntity.ok(dashboardOrchestrator.modifyName(modifyNameReq));
+    }
+
+    @Override
+    public ResponseEntity<Void> updateReplayOffset(ModifyReplayOffsetReq modifyReplayOffsetReq) {
+        dashboardService.modifyTimeLimit(modifyReplayOffsetReq.getOffset());
+        return ResponseEntity.ok().build();
     }
 }

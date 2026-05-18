@@ -1,0 +1,6 @@
+type: object
+properties:
+  offset:
+    type: integer
+    maximum: 1440
+    minimum: 0

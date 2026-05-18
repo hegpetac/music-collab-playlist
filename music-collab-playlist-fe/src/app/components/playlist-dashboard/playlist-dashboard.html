@@ -59,6 +59,18 @@
         </mat-radio-button>
       </mat-radio-group>
     </div>
+    <div class="setting-flex-section">
+      <label class="setting-label">Replay offset time</label>
+      <mat-slider
+        class="offset-limit-slider"
+        min="0"
+        max="1440"
+        step="1"
+        discrete
+      >
+        <input [formControl]="dashboardForm.controls.offsetTimeLimit" matSliderThumb/>
+      </mat-slider>
+    </div>
   </div>
 
   <div class="settings-group">
