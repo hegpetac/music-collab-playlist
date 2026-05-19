@@ -87,5 +87,10 @@
   width: 400px;
 }
 
+.navigation-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
 

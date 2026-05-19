@@ -67,6 +67,7 @@
         max="1440"
         step="1"
         discrete
+        [displayWith]="transform"
       >
         <input [formControl]="dashboardForm.controls.offsetTimeLimit" matSliderThumb/>
       </mat-slider>
@@ -109,16 +110,28 @@
       </div>
     }
   </div>
-  <div class="navigate-button">
-    <button
-      mat-flat-button
-      color="accent"
-      class="join-button"
-      [disabled]="dashboardForm.controls.playlistName.invalid"
-      (click)="navigateToPlaylist()"
-    >
-      Take me to my playlist
-    </button>
+  <div class="navigation-buttons">
+    <div class="navigate-button">
+      <button
+        mat-flat-button
+        color="accent"
+        class="join-button"
+        [disabled]="dashboardForm.controls.playlistName.invalid"
+        (click)="navigateToPlaylist()"
+      >
+        Take me to my playlist
+      </button>
+    </div>
+    <div class="navigate-button">
+      <button
+        mat-flat-button
+        class="join-button"
+        [disabled]="dashboardForm.controls.playlistName.invalid"
+        (click)="navigateToStatistics()"
+        >
+          View playlist statistics
+        </button>
+    </div>
   </div>
 </mat-card>
 }

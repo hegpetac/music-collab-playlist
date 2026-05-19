@@ -1,0 +1,12 @@
+type: object
+properties:
+  totalMinutesPlayed:
+    type: integer
+  youtubeMinutesPlayed:
+    type: integer
+  spotifyMinutesPlayed:
+    type: integer
+  numberOfUniqueSongsPlayed:
+    type: integer
+  mostPlayedTrack:
+    $ref: './most-played-track.yaml'

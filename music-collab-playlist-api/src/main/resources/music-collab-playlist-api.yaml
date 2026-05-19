@@ -632,6 +632,39 @@ paths:
             application/json:
               schema:
                 $ref: './error/not-found.yaml'
+  /playlist-statistics:
+    get:
+      tags:
+        - Statistics
+      operationId: getPlaylistStatistics
+      description: returns the statistics of a playlist
+      summary: returns the statistics of a playlist
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './response/playlist-statistics-resp.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
 
 components:
   securitySchemes:

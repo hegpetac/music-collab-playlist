@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
 import { Configuration } from "../openapi";
+import {provideCharts, withDefaultRegisterables} from 'ng2-charts';
 
 const apiConfiguration = new Configuration({
   withCredentials: true,
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: Configuration,
       useValue: apiConfiguration
-    }
+    },
+    provideCharts(withDefaultRegisterables())
   ]
 };

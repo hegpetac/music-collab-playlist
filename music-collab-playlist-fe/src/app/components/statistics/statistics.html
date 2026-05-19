@@ -1,0 +1,81 @@
+<div class="kpi-row">
+  <mat-card class="kpi-card">
+    <div class="kpi-header">
+      <mat-icon class="kpi-icon">schedule</mat-icon>
+      <span>Total Time Spent Listening</span>
+    </div>
+    <div class="kpi-body">
+      <span class="kpi-value">{{statistics?.totalMinutesPlayed | minutesToTime}}</span>
+    </div>
+  </mat-card>
+
+  <mat-card class="kpi-card">
+    <div class="kpi-header">
+      <mat-icon class="kpi-icon">library_music</mat-icon>
+      <span>Total Songs Listened To</span>
+    </div>
+    <div class="kpi-body">
+      <span class="kpi-value">{{statistics?.numberOfUniqueSongsPlayed}}</span>
+    </div>
+  </mat-card>
+</div>
+<div class="pie-row">
+  <mat-card class="kpi-card">
+    <div class="pie-header">
+      <span class="section-label">Platform percentages</span>
+    </div>
+    <div class="pie-body">
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [type]="'pie'"
+        [options]="pieChartOptions"
+      ></canvas>
+    </div>
+  </mat-card>
+
+  <mat-card class="kpi-card">
+    <div class="kpi-header">
+      <mat-icon class="kpi-icon">workspace_premium</mat-icon>
+      <span class="kpi-label">Most Played Song</span>
+    </div>
+    <div class="top-song-body">
+      @if(mostPlayedTrack) {
+        <div class="track-container">
+          <img class="thumb" [src]="mostPlayedTrack.thumbnail" alt="Not found"/>
+          <div class="track-details">
+            <div class="title">{{mostPlayedTrack.title}}</div>
+            <div class="subtitle">
+              {{mostPlayedTrack.artist}}
+            </div>
+          </div>
+        </div>
+        <div class="play-count-badge">
+          <mat-icon>repeat</mat-icon>
+          <span class="play-count">{{mostPlayedTrack.timesPlayed}}</span>
+        </div>
+      }
+    </div>
+  </mat-card>
+</div>
+<div class="navigation-buttons">
+  <div class="navigate-button">
+    <button
+      mat-flat-button
+      color="accent"
+      class="join-button"
+      (click)="navigateToPlaylist()"
+    >
+      Take me to my playlist
+    </button>
+  </div>
+  <div class="navigate-button">
+    <button
+      mat-flat-button
+      class="join-button"
+      (click)="navigateToDashboard()"
+    >
+      Settings menu
+    </button>
+  </div>
+</div>

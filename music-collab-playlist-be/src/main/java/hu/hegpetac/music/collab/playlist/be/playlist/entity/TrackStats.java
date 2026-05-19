@@ -35,6 +35,9 @@ public class TrackStats {
     @Column(name = "last_played_at")
     private Instant lastPlayedAt;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "playback_stats_id")
     private PlaybackStats playbackStats;

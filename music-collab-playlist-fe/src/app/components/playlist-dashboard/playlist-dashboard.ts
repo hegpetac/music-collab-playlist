@@ -162,6 +162,21 @@ export class PlaylistDashboard implements OnInit {
   public navigateToPlaylist() {
     this._router.navigate(['/playlist-manager']);
   }
+
+  public navigateToStatistics() {
+    this._router.navigate(['/statistics']);
+  }
+
+  public transform(value: number | null | undefined): string {
+    if (value == null || isNaN(value)) {
+      return '0:00'
+    }
+
+    const hours = Math.floor(value / 60);
+    const mimutes = value % 60;
+
+    return hours.toString().padStart(1, '0') + ':' + mimutes.toString().padStart(2, '0');
+  }
 }
 
 export interface IDashboardSettingsForm {

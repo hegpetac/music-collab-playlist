@@ -4,6 +4,7 @@ import {LinkAccount} from './components/link-account/link-account';
 import {PlaylistDashboard} from './components/playlist-dashboard/playlist-dashboard';
 import {PlaylistManager} from './components/playlist-manager/playlist-manager';
 import {SuggestionDashboard} from './components/suggestion-dashboard/suggestion-dashboard';
+import {Statistics} from './components/statistics/statistics';
 
 export const routes: Routes = [
   {
@@ -25,5 +26,9 @@ export const routes: Routes = [
   {
     path: 'suggestion-dashboard',
     component: SuggestionDashboard
+  },
+  {
+    path: 'statistics',
+    component: Statistics
   }
 ];

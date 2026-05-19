@@ -1,0 +1,10 @@
+type: object
+properties:
+  title:
+    type: string
+  artist:
+    type: string
+  thumbnail:
+    type: string
+  timesPlayed:
+    type: integer
