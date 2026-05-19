@@ -15,6 +15,7 @@ import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MsToTimePipe} from '../../pipes/ms-to-time-pipe';
 import {DEFAULT_TOTAL_DURATION} from '../../constants/defaults';
+import {YoutubeAudioService} from '../../services/youtube-audio.service';
 
 @Component({
   selector: 'app-playlist-manager',
@@ -51,6 +52,7 @@ export class PlaylistManager implements OnInit, OnDestroy {
   private _playlistHandlerService = inject(HandlePlaylistService);
   private _playbackHandlerService = inject(HandlePlaybackService);
   private intervalId: number | undefined;
+  private _youtubeAudioService = inject(YoutubeAudioService);
 
   public ngOnInit() {
     combineLatest([
@@ -104,6 +106,7 @@ export class PlaylistManager implements OnInit, OnDestroy {
   }
 
   private handlePlaybackStateMessage() {
+    this._youtubeAudioService.pause();
     this.currentPosMs.set(this.state?.positionMS || 0);
     this.state?.activeTrack ?
       this.totalDurationMs.set(this.state.activeTrack.durationMs) :
@@ -124,7 +127,7 @@ export class PlaylistManager implements OnInit, OnDestroy {
   private handleStartTrack() {
     if (this.state?.activeTrack?.provider === Provider.Youtube) {
       if (this.settings?.youtubePlaybackMode === YoutubePlaybackMode.BuiltIn) {
-        //todo handle iFrame
+        this._youtubeAudioService.play(this.state.activeTrack.providerId, this.state.positionMS! / 1000);
       } else {
         //TODO pause tiltása Youtube ebben az esetben
         window.open(`https://www.youtube.com/watch?v=${this.state.activeTrack.providerId}`, '_blank');
