@@ -19,6 +19,7 @@ import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {Router} from '@angular/router';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {PlaybackManager} from '../playback-manager/playback-manager';
 
 @Component({
   selector: 'app-playlist-dashboard',
@@ -34,6 +35,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     MatError,
     MatSlider,
     MatSliderThumb,
+    PlaybackManager,
   ],
   providers: [
     {

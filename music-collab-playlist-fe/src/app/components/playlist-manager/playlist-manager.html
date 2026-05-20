@@ -1,95 +1,52 @@
-<app-search></app-search>
-<div class="track-handler">
-  <div class="drop-list-column-container">
-    <h3 class="list-header">Queue</h3>
-    <div cdkDropList
-         id="queue"
-         [cdkDropListData]="queue"
-         (cdkDropListDropped)="onQueueDrop($event)"
-         class="drop-list target-column"
-    >
-      @for(item of queue; track item.providerId) {
-        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Queue)"/>
-      }
-    </div>
+<div class="playlist-manager">
+  <div class="header-row">
+    <button mat-icon-button class="control-button" (click)="navigateToDashboard()">
+      <mat-icon class="home-icon">home</mat-icon>
+    </button>
+    <app-search></app-search>
   </div>
-
-  <div class="drop-list-column-container">
-    <h3 class="list-header">Recommendations</h3>
-    <div cdkDropList
-         id="recommendations"
-         [cdkDropListData]="recommendations"
-         [cdkDropListConnectedTo]="['queue']"
-         class="drop-list"
-    >
-      @for(item of recommendations; track item.providerId) {
-        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Recommendations)"/>
-      }
-    </div>
-  </div>
-
-  <div class="drop-list-column-container">
-    <h3 class="list-header">Suggestions</h3>
-    <div cdkDropList
-         id="suggestions"
-         [cdkDropListData]="suggestions"
-         [cdkDropListConnectedTo]="['queue']"
-         class="drop-list"
-    >
-      @for(item of suggestions; track item.providerId) {
-        <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Suggestions)"/>
-      }
-    </div>
-  </div>
-</div>
-<div class="playback-manager">
-  <div class="active-track">
-    @if(state && state.activeTrack) {
-      <img class="thumb" [src]="state.activeTrack.thumbnail" alt="Not found"/>
-      <div class="track-details">
-        <div class="title">{{state.activeTrack.title}}</div>
-        <div class="subtitle">
-          {{state.activeTrack.artist}}
-        </div>
+  <div class="track-handler">
+    <div class="drop-list-column-container">
+      <h3 class="list-header">Queue</h3>
+      <div cdkDropList
+           id="queue"
+           [cdkDropListData]="queue"
+           (cdkDropListDropped)="onQueueDrop($event)"
+           class="drop-list target-column"
+      >
+        @for(item of queue; track item.providerId) {
+          <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Queue)"/>
+        }
       </div>
-    }
-  </div>
-  <div class="playback-controls">
-    <div class="buttons-row">
-      <button
-        class="control-button"
-        mat-icon-button
-        (click)="togglePlayPause()"
-      >
-        <mat-icon>{{state?.status === PlaybackStatus.Playing ? 'pause' : 'play_arrow'}}</mat-icon>
-      </button>
-      <button
-        class="control-button"
-        mat-icon-button
-        (click)="skip()"
-      >
-        <mat-icon>skip_next</mat-icon>
-      </button>
     </div>
-    <div class="progress-row">
-      <span class="time-display">{{(isSeeking ? seekPreviewsMs : currentPosMs()) | msToTime}}</span>
-      <mat-slider
-        class="progress-slider"
-        min="0"
-        max="100"
-        step="0.1"
-      >
-        <input
-          matSliderThumb
-          [value]="progressPercent()"
-          (mousedown)="onSeekStart($event)"
-          (touchstart)="onSeekStart($event)"
-          (input)="onSeekMove($event)"
-          (change)="onSeekEnd($event)"
-        />
-      </mat-slider>
-      <span class="time-display">{{ totalDurationMs() | msToTime}}</span>
-    </div>
-  </div>
-</div>
 
+    <div class="drop-list-column-container">
+      <h3 class="list-header">Recommendations</h3>
+      <div cdkDropList
+           id="recommendations"
+           [cdkDropListData]="recommendations"
+           [cdkDropListConnectedTo]="['queue']"
+           class="drop-list"
+      >
+        @for(item of recommendations; track item.providerId) {
+          <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Recommendations)"/>
+        }
+      </div>
+    </div>
+
+    <div class="drop-list-column-container">
+      <h3 class="list-header">Suggestions</h3>
+      <div cdkDropList
+           id="suggestions"
+           [cdkDropListData]="suggestions"
+           [cdkDropListConnectedTo]="['queue']"
+           class="drop-list"
+      >
+        @for(item of suggestions; track item.providerId) {
+          <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Suggestions)"/>
+        }
+      </div>
+    </div>
+  </div>
+  <app-playback-manager/>
+</div>

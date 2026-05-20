@@ -7,6 +7,7 @@ import {BaseChartDirective} from 'ng2-charts';
 import {ChartConfiguration} from 'chart.js';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
+import {PlaybackManager} from '../playback-manager/playback-manager';
 
 @Component({
   selector: 'app-statistics',
@@ -15,7 +16,8 @@ import {Router} from '@angular/router';
     MatIcon,
     MinutesToTimePipe,
     BaseChartDirective,
-    MatButton
+    MatButton,
+    PlaybackManager
   ],
   templateUrl: './statistics.html',
   styleUrl: './statistics.css',
