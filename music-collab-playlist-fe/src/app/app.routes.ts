@@ -5,6 +5,7 @@ import {PlaylistDashboard} from './components/playlist-dashboard/playlist-dashbo
 import {PlaylistManager} from './components/playlist-manager/playlist-manager';
 import {SuggestionDashboard} from './components/suggestion-dashboard/suggestion-dashboard';
 import {Statistics} from './components/statistics/statistics';
+import {OwnerFlow} from './components/owner-flow/owner-flow';
 
 export const routes: Routes = [
   {
@@ -12,23 +13,30 @@ export const routes: Routes = [
     component: LandingPage
   },
   {
+    path: 'dashboard',
+    component: OwnerFlow,
+
+    children: [
+      {
+        path: '',
+        component: PlaylistDashboard
+      },
+      {
+        path: 'playlist-manager',
+        component: PlaylistManager
+      },
+      {
+        path: 'statistics',
+        component: Statistics
+      }
+    ]
+  },
+  {
     path: 'link-account',
     component: LinkAccount
-  },
-  {
-    path: 'dashboard',
-    component: PlaylistDashboard
-  },
-  {
-    path: 'playlist-manager',
-    component: PlaylistManager
   },
   {
     path: 'suggestion-dashboard',
     component: SuggestionDashboard
   },
-  {
-    path: 'statistics',
-    component: Statistics
-  }
 ];

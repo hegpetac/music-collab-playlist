@@ -2,22 +2,18 @@ import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import {MostPlayedTrack, PlaylistStatistics, StatisticsService} from '../../../openapi';
 import {MatCard} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
-import {MinutesToTimePipe} from '../../pipes/minutes-to-time-pipe';
 import {BaseChartDirective} from 'ng2-charts';
 import {ChartConfiguration} from 'chart.js';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
-import {PlaybackManager} from '../playback-manager/playback-manager';
 
 @Component({
   selector: 'app-statistics',
   imports: [
     MatCard,
     MatIcon,
-    MinutesToTimePipe,
     BaseChartDirective,
     MatButton,
-    PlaybackManager
   ],
   templateUrl: './statistics.html',
   styleUrl: './statistics.css',
@@ -59,7 +55,7 @@ export class Statistics implements OnInit {
   }
 
   public navigateToPlaylist() {
-    this._router.navigate(['/playlist-manager']);
+    this._router.navigate(['/dashboard/playlist-manager']);
   }
 
   public navigateToDashboard() {

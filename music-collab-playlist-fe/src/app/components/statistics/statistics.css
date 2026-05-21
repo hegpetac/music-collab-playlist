@@ -1,8 +1,15 @@
+.statistics {
+  display: flex;
+  flex-direction: column;
+}
+
 .kpi-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-bottom: 20px;
+  width: 60vw;
+  align-self: center;
 }
 
 .kpi-card {
@@ -14,6 +21,8 @@
   gap: 16px;
   padding: 12px;
 }
+
+/*TODO fix layout*/
 
 .kpi-icon {
   margin-right: 10px;
@@ -44,6 +53,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 60vw;
+  align-self: center;
 }
 
 .track-container {
@@ -103,5 +114,6 @@
   margin-top: 20px;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  align-self: center;
+  gap: 16px;
 }

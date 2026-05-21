@@ -9,6 +9,7 @@
 .active-track {
   color: #fbfbfb;
   display: flex;
+  width: 25vw;
 }
 
 .title {
@@ -19,6 +20,10 @@
 
 .subtitle {
   font-size: 14px;
+}
+
+.playback-controls {
+  width: 60vw;
 }
 
 .control-button {
@@ -66,4 +71,8 @@
 
 .time-display {
   color: #fbfbfb;
+}
+
+.playback-active-button {
+  width: 10vw;
 }

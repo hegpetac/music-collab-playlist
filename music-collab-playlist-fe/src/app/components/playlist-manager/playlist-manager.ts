@@ -11,7 +11,6 @@ import {CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem} from '@ang
 import {TrackContainer} from './track-container/track-container';
 import {Search} from './search/search';
 import {MatIcon} from '@angular/material/icon';
-import {PlaybackManager} from '../playback-manager/playback-manager';
 import {Router} from '@angular/router';
 import {MatIconButton} from '@angular/material/button';
 
@@ -22,7 +21,6 @@ import {MatIconButton} from '@angular/material/button';
     TrackContainer,
     Search,
     MatIcon,
-    PlaybackManager,
     MatIconButton
   ],
   templateUrl: './playlist-manager.html',

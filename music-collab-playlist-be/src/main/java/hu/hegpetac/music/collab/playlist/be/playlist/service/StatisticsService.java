@@ -35,19 +35,19 @@ public class StatisticsService {
         stats.setNumberOfUniqueSongsPlayed(trackStatistics.size());
         stats.setTotalMinutesPlayed(
                 trackStatistics.stream()
-                    .map(trackStats -> trackStats.getTimesPlayed() * trackStats.getTrackLengthSeconds())
+                    .map(trackStats -> trackStats.getTimesPlayed() * (trackStats.getTrackLengthSeconds() / 1000))
                     .reduce(0, Integer::sum) / 60
         );
         stats.setYoutubeMinutesPlayed(
                 trackStatistics.stream()
                     .filter(trackStats -> Provider.YOUTUBE == trackStats.getProvider())
-                    .map(trackStats -> trackStats.getTimesPlayed() * trackStats.getTrackLengthSeconds())
+                    .map(trackStats -> trackStats.getTimesPlayed() * (trackStats.getTrackLengthSeconds() / 1000))
                     .reduce(0, Integer::sum) / 60
         );
         stats.setSpotifyMinutesPlayed(
                 trackStatistics.stream()
                         .filter(trackStats -> Provider.SPOTIFY == trackStats.getProvider())
-                        .map(trackStats -> trackStats.getTimesPlayed() * trackStats.getTrackLengthSeconds())
+                        .map(trackStats -> trackStats.getTimesPlayed() * (trackStats.getTrackLengthSeconds() / 1000))
                         .reduce(0, Integer::sum) / 60
         );
         var mostPlayed = trackStatistics.stream().max(Comparator.comparingInt(TrackStats::getTimesPlayed));

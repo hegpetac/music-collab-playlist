@@ -49,20 +49,36 @@ export class YoutubeAudioService {
   }
 
   private createHiddenPlayer(): void {
+
+    const wrapper = document.createElement('div');
+    wrapper.id = 'youtube-video-wrapper';
+
+    wrapper.style.position = 'fixed';
+    wrapper.style.bottom = '0';
+    wrapper.style.right = '0';
+    wrapper.style.width = '200px';
+    wrapper.style.height = '200px';
+    wrapper.style.overflow = 'hidden';
+    wrapper.style.zIndex = '100';
+    wrapper.style.pointerEvents = 'none';
+
     const container = document.createElement('div');
-
     container.id = "hidden-youtube-player";
+    container.style.width = '100%';
+    container.style.height = '100%';
 
-    container.style.position = 'fixed';
-    container.style.left = '0';
-    container.style.top = '0';
-    container.style.width = '200px';
-    container.style.height = '200px';
-    container.style.zIndex = '-100';
+    const mask = document.createElement('div');
+    mask.style.position = 'absolute';
+    mask.style.top = '0';
+    mask.style.left = '0';
+    mask.style.width = '100%';
+    mask.style.height = '100%';
+    mask.style.background = '#000000';
+    mask.style.zIndex = '10';
 
-    container.style.pointerEvents = 'none';
-
-    document.body.appendChild(container);
+    wrapper.appendChild(container);
+    wrapper.appendChild(mask);
+    document.body.appendChild(wrapper);
 
     this.player = new window.YT.Player("hidden-youtube-player", {
       height: '200',

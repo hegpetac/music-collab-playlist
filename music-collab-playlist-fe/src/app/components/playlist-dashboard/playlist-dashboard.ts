@@ -18,8 +18,6 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {debounceTime, distinctUntilChanged} from 'rxjs';
 import {Router} from '@angular/router';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {PlaybackManager} from '../playback-manager/playback-manager';
 
 @Component({
   selector: 'app-playlist-dashboard',
@@ -35,7 +33,6 @@ import {PlaybackManager} from '../playback-manager/playback-manager';
     MatError,
     MatSlider,
     MatSliderThumb,
-    PlaybackManager,
   ],
   providers: [
     {
@@ -162,11 +159,11 @@ export class PlaylistDashboard implements OnInit {
   }
 
   public navigateToPlaylist() {
-    this._router.navigate(['/playlist-manager']);
+    this._router.navigate(['/dashboard/playlist-manager']);
   }
 
   public navigateToStatistics() {
-    this._router.navigate(['/statistics']);
+    this._router.navigate(['/dashboard/statistics']);
   }
 
   public transform(value: number | null | undefined): string {
