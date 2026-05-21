@@ -43,7 +43,7 @@
            class="drop-list"
       >
         @for(item of suggestions; track item.providerId) {
-          <app-track-container [item]="item" (deleteTrack)="deleteTrackFromList($event, TrackList.Suggestions)"/>
+          <app-track-container [item]="item" [displayVotes]="true" (deleteTrack)="deleteTrackFromList($event, TrackList.Suggestions)"/>
         }
       </div>
     </div>

@@ -18,6 +18,7 @@ import {MatIcon} from '@angular/material/icon';
 })
 export class TrackContainer {
   @Input({required: true}) item!: TrackSummary
+  @Input() displayVotes: boolean = false;
 
   @Output() deleteTrack = new EventEmitter<TrackSummary>();
 

@@ -9,7 +9,12 @@
       </div>
     </div>
   </div>
-  <button mat-icon-button class="delete-track-button" (click)="emitDelete(item)">
-    <mat-icon fontIcon="delete_outline"/>
-  </button>
+  <div class="actions">
+    @if (displayVotes) {
+      <span class="count">{{item.voteCount}}</span>
+    }
+    <button mat-icon-button class="delete-track-button" (click)="emitDelete(item)">
+      <mat-icon fontIcon="delete_outline"/>
+    </button>
+  </div>
 </div>
