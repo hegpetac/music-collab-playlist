@@ -376,7 +376,7 @@ paths:
                 $ref: './error/not-found.yaml'
 
   /suggest:
-    get:
+    post:
       tags:
         - Suggest
       operationId: getSuggestions

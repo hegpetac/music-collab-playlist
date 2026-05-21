@@ -1,13 +1,14 @@
 import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Provider, SearchService, SuggestService, TrackSummary} from '../../../openapi';
-import {debounceTime, of, switchMap} from 'rxjs';
+import {combineLatest, debounceTime, of, switchMap} from 'rxjs';
 import {MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {DecimalPipe} from '@angular/common';
 import {toObservable} from '@angular/core/rxjs-interop';
+import {WebSocketService} from '../../services/websocket.service';
 
 @Component({
   selector: 'app-suggestion-dashboard',
@@ -31,8 +32,10 @@ export class SuggestionDashboard implements OnInit {
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _searchService = inject(SearchService);
   private _suggestService: SuggestService = inject(SuggestService);
+  private _ws: WebSocketService = inject(WebSocketService);
   public deviceCode!: number;
   public playlistName!: string;
+  public suggestions: TrackSummary[] = [];
 
   public spotifyQuery = signal<string>("");
   public youtubeQuery = signal<string>("");
@@ -85,6 +88,24 @@ export class SuggestionDashboard implements OnInit {
     this._route.queryParams.subscribe(params => {
       this.deviceCode = params['deviceCode'];
       this.playlistName = params['name'];
+      combineLatest([
+        this._suggestService.getSuggestions({
+          playlistName: this.playlistName,
+          deviceCode: this.deviceCode,
+        }),
+        this._ws.isConnected()
+      ])
+        .subscribe(([suggestions]) => {
+          this.suggestions = suggestions.suggestions || [];
+          console.log(suggestions);
+          this._ws.subscribe<TrackSummary[]>(
+            `/topic/current/${this.playlistName}`,
+            (data: TrackSummary[]) => {
+              console.log(data);
+              this.suggestions = data;
+            }
+          )
+        })
     });
   }
 

@@ -24,4 +24,8 @@ public class ModelUpdateNotifier {
     public void notifyPlaybackEvent(String playlistName, PlaybackState state) {
         messagingTemplate.convertAndSend("/topic/playback/" + playlistName, state);
     }
+
+    public void notifyCurrentlyPlayingUpdated(String playlistName, TrackSummary trackSummary) {
+        messagingTemplate.convertAndSend("/topic/current/" + playlistName, trackSummary);
+    }
 }

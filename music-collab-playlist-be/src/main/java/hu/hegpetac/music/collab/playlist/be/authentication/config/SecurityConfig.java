@@ -63,6 +63,8 @@ public class SecurityConfig {
                                         "/join-playlist",
                                         "/suggest-track",
                                         "/search",
+                                        "/suggest",
+                                        "/vote-suggestion",
                                         "/ws/**"
                                 ).permitAll()
                                 .requestMatchers("/api/full/**").authenticated()

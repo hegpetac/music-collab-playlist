@@ -5,7 +5,6 @@ import hu.hegpetac.music.collab.playlist.be.authentication.model.CustomOAuth2Use
 import hu.hegpetac.music.collab.playlist.be.dashboard.entity.DashboardSettings;
 import hu.hegpetac.music.collab.playlist.be.exception.NotFoundException;
 import hu.hegpetac.music.collab.playlist.be.exception.UnauthorizedException;
-import hu.hegpetac.music.collab.playlist.be.playlist.entity.PlaybackStats;
 import hu.hegpetac.music.collab.playlist.be.playlist.entity.TrackStats;
 import hu.hegpetac.music.collab.playlist.be.playlist.mapper.TrackMapper;
 import hu.hegpetac.music.collab.playlist.be.playlist.model.PlaybackSession;
@@ -200,6 +199,7 @@ public class PlaybackService {
             spotifyPlaybackService.resumePlayback(state.getActiveTrack().getProviderId(), state.getPositionMS().longValue());
         }
         notifier.notifyPlaybackEvent(playlistName, state);
+        notifier.notifyCurrentlyPlayingUpdated(playlistName, state.getActiveTrack());
     }
 
     private ScheduledFuture<?> scheduleTrackFinish(String playlistName, PlaybackSession session) {
