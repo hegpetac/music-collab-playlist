@@ -22,6 +22,8 @@ properties:
     type: string
   metadata:
     type: object
+  voteCount:
+    type: integer
 required:
   - provider
   - providerId

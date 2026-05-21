@@ -40,10 +40,13 @@ export class PlaylistManager implements OnInit {
   public ngOnInit() {
     combineLatest([
       this._dashboardService.getDashboardSettings(),
+      this._playlistHandlerService.getTrackLists(),
       this._ws.isConnected()
     ])
-    .subscribe(([settings]) => {
+    .subscribe(([settings, trackListResp]) => {
       this.settings = settings;
+      this.queue = trackListResp.queue || [];
+      this.suggestions = trackListResp.suggestions || [];
       this._ws.subscribe<TrackSummary[]>(
         `/topic/suggestions/${this.settings?.name}`,
         (data: TrackSummary[]) => {

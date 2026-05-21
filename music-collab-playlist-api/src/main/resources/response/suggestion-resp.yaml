@@ -1,0 +1,6 @@
+type: object
+properties:
+  suggestions:
+    type: array
+    items:
+      $ref: '../model/track-summary.yaml'

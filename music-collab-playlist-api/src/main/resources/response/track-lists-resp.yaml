@@ -1,0 +1,10 @@
+type: object
+properties:
+  queue:
+    type: array
+    items:
+      $ref: '../model/track-summary.yaml'
+  suggestions:
+    type: array
+    items:
+      $ref: '../model/track-summary.yaml'

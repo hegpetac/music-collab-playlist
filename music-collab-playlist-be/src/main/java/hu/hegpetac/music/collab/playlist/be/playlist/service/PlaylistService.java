@@ -80,6 +80,31 @@ public class PlaylistService {
         notifier.notifyQueueUpdated(playlistName, updatedQueue);
     }
 
+    public TrackListsResp getTrackLists() {
+        String playlistName = getPlaylistFromSession().getName();
+        System.out.println("talalt playlistName: " + playlistName);
+        queueRegistry.registerPlaylist(playlistName);
+        var queueOpt = queueRegistry.findTrackList(playlistName);
+
+        if (queueOpt.isEmpty()) {
+            throw new NotFoundException("Queue not found: " + playlistName);
+        }
+
+        trackRegistry.registerPlaylist(playlistName);
+        var suggestionsOpt = trackRegistry.findTrackList(playlistName);
+
+        if (suggestionsOpt.isEmpty()) {
+            throw new NotFoundException("Suggestions not found: " + playlistName);
+        }
+
+        var resp = new TrackListsResp();
+        System.out.println("Talalt elemek száma: " + suggestionsOpt.get().size());
+        resp.setQueue(queueOpt.get());
+        resp.setSuggestions(suggestionsOpt.get());
+
+        return resp;
+    }
+
     private DashboardSettings getPlaylistFromSession() throws UnauthorizedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {

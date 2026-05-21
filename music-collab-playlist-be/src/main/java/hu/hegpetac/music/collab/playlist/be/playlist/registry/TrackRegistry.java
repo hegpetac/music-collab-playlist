@@ -36,7 +36,7 @@ public class TrackRegistry {
 
     public void deleteTrack(String playlistName, String providerId) {
         List<TrackSummary> tracks = playlists.get(playlistName);
-        if (tracks ==null) {
+        if (tracks == null) {
             return;
         }
 

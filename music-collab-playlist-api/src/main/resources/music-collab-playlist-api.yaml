@@ -341,6 +341,77 @@ paths:
             application/json:
               schema:
                 $ref: './error/not-found.yaml'
+  /vote-suggestion:
+    post:
+      tags:
+        - Suggest
+      operationId: voteOnSuggestion
+      summary: Vote on a suggested track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/vote-suggestion-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /suggest:
+    get:
+      tags:
+        - Suggest
+      operationId: getSuggestions
+      summary: get the suggestions for the playlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './request/get-suggestion-req.yaml'
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './response/suggestion-resp.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
 
   /handle-playlist/search:
     post:
@@ -363,6 +434,39 @@ paths:
                 type: array
                 items:
                   $ref: './model/track-summary.yaml'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: './error/bad-request.yaml'
+        '403':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: './error/unauthorized.yaml'
+        '404':
+          description: 'Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: './error/not-found.yaml'
+
+  /handle-playlist:
+    get:
+      tags:
+        - Handle Playlist
+      operationId: getTrackLists
+      description: get tracks in line
+      summary: Get playlist tracks
+      responses:
+        '200':
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: './response/track-lists-resp.yaml'
         '400':
           description: 'Bad Request'
           content:
